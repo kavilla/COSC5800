@@ -1,7 +1,7 @@
 # Final Project for COSC5800
 
 Final project to implement an online conference review database system using
-Python, Flask, FlaskRestPlus,and with an oracle database as the back end.
+Python, Flask, FlaskRestPlus, and with an oracle database as the back end.
 Front end was built in ReactJS, which was bootstrapped with
 [Create React App](https://github.com/facebook/create-react-app).
 
