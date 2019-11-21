@@ -64,3 +64,4 @@ The conference review is given in previous assignments.
 * [Making a Progressive Web App in React](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
 * [Advanced Configuration in React](https://facebook.github.io/create-react-app/docs/advanced-configuration)
 * [Mocks](https://app.moqups.com/dPCEae4MLG/edit/page/a1b990b30)
+* [Getting started with React Router](https://codeburst.io/getting-started-with-react-router-5c978f70df91)
