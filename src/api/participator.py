@@ -17,7 +17,7 @@ class ParticipatorList(Resource):
 
         # Serialize the data for the response
         participators_schema = ParticipatorSchema(many=True)
-        return participators_schema.dump(participators).data
+        return participators_schema.dump(participators)
     def post(self):
         """
         Adds a new participators to the list
