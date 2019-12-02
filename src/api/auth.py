@@ -7,14 +7,19 @@ app = Flask(__name__)
 api = Api(app=app)
 ns = api.namespace('auth', description='Auth operations')
 
-auth_model = ns.model('Auth', {
+login_model = ns.model('Auth Login', {
+    'email': fields.String(required=True, description='Email', help='Email is required.'),
+    'password': fields.String(required=True, description='Password', help='Password is required.'),
+})
+
+signup_model = ns.model('Auth SignUp', {
     'email': fields.String(required=True, description='Email', help='Email is required.'),
     'password': fields.String(required=True, description='Password', help='Password is required.'),
 })
 
 @ns.route("/login")
 class AuthLogin(Resource):
-    @ns.expect(auth_model)
+    @ns.expect(login_model)
     @ns.doc(responses={
         200: 'Success',
         400: 'Invalid Request'
@@ -22,6 +27,30 @@ class AuthLogin(Resource):
     def post(self):
         """
         Returns a participator if valid
+        """
+        try:
+            data = request.get_json(force=True)
+
+            # Serialize the data for the response
+            result = db.session.execute('SELECT * FROM participator WHERE email = :email AND password = :password', {
+                'email': data['email'],
+                'password': data['password']
+            }).fetchone()
+            participator_schema = ParticipatorSchema()
+            return participator_schema.dump(result)
+        except Exception as e:
+            ns.abort(400, e.__doc__, status = 'Could not retrieve information', statusCode = '400')
+
+@ns.route("/signup")
+class AuthSignUp(Resource):
+    @ns.expect(signup_model)
+    @ns.doc(responses={
+        200: 'Success',
+        400: 'Invalid Request'
+    })
+    def post(self):
+        """
+        Create and returns a participator if valid
         """
         try:
             data = request.get_json(force=True)
