@@ -5,3 +5,4 @@ marshmallow==3.2.2
 flask-marshmallow==0.10.1
 marshmallow-sqlalchemy==0.19.0
 cx-Oracle==7.2.3
+flask-cors==3.0.8

@@ -2,6 +2,7 @@ import React from "react";
 import {Button, FormGroup, FormControl, FormLabel} from "react-bootstrap";
 import {Link} from "react-router-dom";
 import "./Login.css";
+import AuthService from "./../../services/AuthService";
 
 export default class Login extends React.Component {
   constructor(props) {
@@ -25,6 +26,8 @@ export default class Login extends React.Component {
 
   handleSubmit = event => {
     event.preventDefault();
+
+    AuthService.login(this.state.email, this.state.password);
   };
 
   render() {

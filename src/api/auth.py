@@ -36,6 +36,8 @@ class AuthLogin(Resource):
                 'email': data['email'],
                 'password': data['password']
             }).fetchone()
+            if result == None:
+                ns.abort(404, e.__doc__, status = 'Could not find user', statusCode = '404')
             participator_schema = ParticipatorSchema()
             return participator_schema.dump(result)
         except Exception as e:
