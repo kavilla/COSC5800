@@ -7,7 +7,7 @@ app = Flask(__name__)
 api = Api(app=app)
 ns = api.namespace('auth', description='Auth operations')
 
-auth_model = ns.model('Credentials', {
+auth_model = ns.model('Auth', {
     'email': fields.String(required=True, description='Email', help='Email is required.'),
     'password': fields.String(required=True, description='Password', help='Password is required.'),
 })
