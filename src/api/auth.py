@@ -22,7 +22,8 @@ class AuthLogin(Resource):
     @ns.expect(login_model)
     @ns.doc(responses={
         200: 'Success',
-        400: 'Invalid Request'
+        400: 'Invalid Request',
+        404: 'Participator not found'
     })
     def post(self):
         """
