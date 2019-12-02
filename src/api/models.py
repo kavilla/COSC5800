@@ -8,14 +8,16 @@ class Participator(db.Model):
     lastname = db.Column(db.String(25))
     phone = db.Column(db.String(10))
     affiliation = db.Column(db.String(25))
+    password = db.Column(db.String(15))
 
-    def __init__(self, email, firstname, minit, lastname, phone, affiliation):
+    def __init__(self, email, firstname, minit, lastname, phone, affiliation, password):
         self.email = email
         self.firstname = firstname
         self.minit = minit
         self.lastname = lastname
         self.phone = phone
         self.affiliation = affiliation
+        self.password = password
 
 class ParticipatorSchema(ma.ModelSchema):
     class Meta:

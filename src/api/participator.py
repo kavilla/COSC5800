@@ -23,13 +23,13 @@ class ParticipatorList(Resource):
         Adds a new participators to the list
         """
 
-@ns.route("/<int:id>")
+@ns.route('/<string:email>')
 class Participator(Resource):
-    def get(self, id):
+    def get(self, email):
         """
         Displays a participator's details
         """
-    def put(self, id):
+    def put(self, email):
         """
         Edits a selected participators
         """
