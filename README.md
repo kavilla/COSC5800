@@ -1,7 +1,7 @@
 # Final Project for COSC5800
 
 Final project to implement an online conference review database system using
-Python, Flask, FlaskRestPlus,and with an oracle database as the back end.
+Python, Flask, FlaskRestPlus, and with an oracle database as the back end.
 Front end was built in ReactJS, which was bootstrapped with
 [Create React App](https://github.com/facebook/create-react-app).
 
@@ -11,6 +11,7 @@ The conference review is given in previous assignments.
 
 * Clone this repo
 * Open your desired shell
+* [Install Oracle Client](https://oracle.github.io/odpi/doc/installation.html#windows)
 
 `How to run the API:`
 
@@ -64,3 +65,4 @@ The conference review is given in previous assignments.
 * [Making a Progressive Web App in React](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
 * [Advanced Configuration in React](https://facebook.github.io/create-react-app/docs/advanced-configuration)
 * [Mocks](https://app.moqups.com/dPCEae4MLG/edit/page/a1b990b30)
+* [Getting started with React Router](https://codeburst.io/getting-started-with-react-router-5c978f70df91)
