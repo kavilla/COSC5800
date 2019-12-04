@@ -11,7 +11,7 @@ The conference review is given in previous assignments.
 
 * Clone this repo
 * Open your desired shell
-
+* [Install Oracle Client](https://oracle.github.io/odpi/doc/installation.html#windows)
 `How to run the API:`
 
 * cd src/api
