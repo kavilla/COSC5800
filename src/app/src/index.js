@@ -4,7 +4,7 @@ import "./index.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import {Route, Link, BrowserRouter as Router} from "react-router-dom";
 
-import App from "./App";
+import Home from "./components/Home/Home";
 import Login from "./components/Login/Login";
 import SignUp from "./components/SignUp/SignUp";
 import * as serviceWorker from "./serviceWorker";
@@ -20,7 +20,7 @@ const routing = (
           <Link to="/login">Login</Link>
         </li>
       </ul>
-      <Route exact path="/" component={App} />
+      <Route exact path="/" component={Home} />
       <Route path="/login" component={Login} />
       <Route path="/signup" component={SignUp} />
     </div>

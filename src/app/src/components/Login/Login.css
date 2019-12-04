@@ -12,4 +12,8 @@
     margin: 8px auto;
     max-width: 320px;
   }
+
+  .Login div span {
+    padding-right: 8px;
+  }
 }

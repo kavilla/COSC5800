@@ -1,5 +1,8 @@
 from config import db, ma
 
+class NotFoundException(Exception):
+    pass
+
 class Participator(db.Model):
     __tablename__ = 'participator'
     email = db.Column(db.String(30), primary_key=True)

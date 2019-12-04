@@ -1,6 +1,6 @@
 import React from "react";
 import {Button, FormGroup, FormControl, FormLabel} from "react-bootstrap";
-import {Link} from "react-router-dom";
+import {Redirect, Link} from "react-router-dom";
 import "./Login.css";
 import AuthService from "./../../services/AuthService";
 
@@ -10,7 +10,8 @@ export default class Login extends React.Component {
 
     this.state = {
       email: "",
-      password: ""
+      password: "",
+      toHome: false
     };
   }
 
@@ -27,10 +28,23 @@ export default class Login extends React.Component {
   handleSubmit = event => {
     event.preventDefault();
 
-    AuthService.login(this.state.email, this.state.password);
+    AuthService.login(this.state.email, this.state.password)
+      .then(resp => {
+        if (resp) {
+          this.setState(() => ({
+            toHome: true
+          }));
+        } else {
+          alert("Invalid email and/or password");
+        }
+      });
   };
 
   render() {
+    if (this.state.toHome) {
+      return <Redirect to="/" />;
+    }
+
     return (
       <div className="Login">
         <form onSubmit={this.handleSubmit}>

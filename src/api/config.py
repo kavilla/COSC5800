@@ -19,8 +19,9 @@ api = Api(
 )
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'oracle://%s:%s@%s:%s/%s' % (config['db_username'], config['db_password'], config['db_host'], config['db_port'], config['db_sid'])
+app.config['SQLALCHEMY_DATABASE_URI'] = 'oracle+cx_oracle://%s:%s@%s:%s/%s' % (config['db_username'], config['db_password'], config['db_host'], config['db_port'], config['db_sid'])
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.logger.warning(app.config['SQLALCHEMY_DATABASE_URI'])
 
 cors = CORS(app, resources={r"*": {"origins": "*"}})
 
