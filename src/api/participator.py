@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_restplus import Api, Resource
 from config import db
-from models import Participator as P, ParticipatorSchema
+from models import Participator, ParticipatorSchema
 
 app = Flask(__name__)
 api = Api(app=app)
@@ -13,7 +13,7 @@ class ParticipatorList(Resource):
         """
         Returns a list of participators
         """
-        participators = P.query.all()
+        participators = Participator.query.all()
 
         # Serialize the data for the response
         participators_schema = ParticipatorSchema(many=True)

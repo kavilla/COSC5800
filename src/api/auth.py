@@ -1,7 +1,7 @@
 from flask import Flask, request
 from flask_restplus import Api, Resource, fields
 from config import db
-from models import Participator as P, ParticipatorSchema, NotFoundException
+from models import Participator, ParticipatorSchema, NotFoundException
 
 app = Flask(__name__)
 api = Api(app=app)
