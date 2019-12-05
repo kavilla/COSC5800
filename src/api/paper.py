@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_restplus import Api, Resource
 from config import db
-from models import Paper, PaperSchema
+from models import Paper as P, PaperSchema
 
 app = Flask(__name__)
 api = Api(app=app)
@@ -13,7 +13,7 @@ class PaperList(Resource):
         """
         Returns a list of paper
         """
-        papers = Paper.query.all()
+        papers = P.query.all()
 
         # Serialize the data for the response
         papers_schema = PaperSchema(many=True)
@@ -27,9 +27,9 @@ class PaperList(Resource):
 class Paper(Resource):
     def get(self, paperid):
         """
-        Displays a participator's details
+        Displays a paper's details
         """
     def put(self, paperid):
         """
-        Edits a selected participators
+        Edits a selected paper
         """
