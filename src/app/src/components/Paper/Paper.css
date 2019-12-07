@@ -3,4 +3,31 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  background: lightgray;
+  margin: 0.25em 1.25em;
+}
+
+.paper-card {
+  display: block;
+  color: black;
+  text-align: left;
+  padding: 0.75em 1.25em 5em 0.75em;
+  background: white;
+  border: 0.1em solid;
+  flex: 1;
+}
+
+.paper-card .paper-card-header {
+  color: lightgray;
+}
+
+.paper-card .paper-card-item {
+  display: block;
+}
+
+.review-card-container {
+  flex: 2;
+  overflow-y:auto;
+  margin: 0.25em 1.25em;
+  background: lightgray;
 }

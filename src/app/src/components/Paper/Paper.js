@@ -7,7 +7,8 @@ export default class Paper extends React.Component {
     super(props);
 
     this.state = {
-      paper: null
+      paper: null,
+      reviews: []
     }
 
     PaperService.getSelectedPaper()
@@ -18,36 +19,36 @@ export default class Paper extends React.Component {
       });
   }
 
-  // handleCardClick = (paper) => {
-  //   console.log(paper)
-  // };
-
   render() {
-    let paperCard = null;
-    if (this.state.paper !== null) {
-      paperCard =
-        <div className="card">
-          <div className="card-top">
-            <h3>#{ this.state.paper.paperid }</h3>
-          </div>
-          <div className="card-middle">
-            <h1>{ this.state.paper.title }</h1>
-          </div>
-          <div className="card-bottom">
-            <span className="card-bottom-item-small">
-              Contact: { this.state.paper.contactauthoremail }
-            </span>
-            <span className="card-bottom-item-large">
-              Abstract: { this.state.paper.abstract }
-            </span>
-          </div>
-        </div>
-    }
+    const paperCard = this.state.paper !== null ?
+      <div className="paper-card">
+        <h3 className="paper-card-header">#{ this.state.paper.paperid }</h3>
+        <h1 className="paper-card-item">{ this.state.paper.title }</h1>
+        <span className="paper-card-item">
+          Contact: { this.state.paper.contactauthoremail }
+        </span>
+        <span className="paper-card-item">
+          Overall Score: TODO
+        </span>
+        <span className="paper-card-item">
+          Filename: { this.state.paper.filename }
+        </span>
+        <span className="paper-card-item">
+          Abstract: { this.state.paper.abstract }
+        </span>
+      </div> : null;
+
+    const reviewCards = this.state.reviews.map((review) => (
+      <div className="review-card">
+        Hello
+      </div>
+    ));
 
     return (
-      <div className="home">
-        <div className="card-container">
-          { paperCard }
+      <div className="paper">
+        { paperCard }
+        <div className="review-card-container ">
+          { reviewCards }
         </div>
       </div>
     )
