@@ -39,8 +39,7 @@ class Paper(Resource):
             paper_schema = PaperSchema()
             return paper_schema.dump(result)
         except NotFoundException as e:
-            ns.abort(404, e.__doc__, status = 'Could not find participator with email and password', statusCode = '404')
-        return papers_schema.dump(papers)
+            ns.abort(404, e.__doc__, status = 'Could not find paper with paperid', statusCode = '404')
     def put(self, paperid):
         """
         Edits a selected paper

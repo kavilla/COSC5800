@@ -49,3 +49,42 @@ class PaperSchema(ma.ModelSchema):
     class Meta:
         model = Paper
         sqla_session = db.session
+
+# Review
+class Review(db.Model):
+    __tablename__ = 'reviews'
+    revemail = db.Column(db.String(30), primary_key=True)
+    paperid = db.Column(db.Integer(), primary_key=True)
+    techmerit = db.Column(db.Integer())
+    readability = db.Column(db.Integer())
+    originality = db.Column(db.Integer())
+    relavance = db.Column(db.Integer())
+    overallrecomm = db.Column(db.Integer())
+    commentforcommittee = db.Column(db.String(120))
+    commentforauthor = db.Column(db.String(120))
+
+    def __init__(
+        self,
+        revemail,
+        paperid,
+        techmerit,
+        readability,
+        originality,
+        relavance,
+        overallrecomm,
+        commentforcommittee,
+        commentforauthor):
+        self.revemail = revemail
+        self.paperid = paperid
+        self.techmerit = techmerit
+        self.readability = readability
+        self.originality = originality
+        self.relavance = relavance
+        self.overallrecomm = overallrecomm
+        self.commentforcommittee = commentforcommittee
+        self.commentforauthor = commentforauthor
+
+class ReviewSchema(ma.ModelSchema):
+    class Meta:
+        model = Review
+        sqla_session = db.session
