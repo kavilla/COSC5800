@@ -1,22 +1,41 @@
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.home {
+  height: 100vh;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
 }
 
-.App-link {
-  color: #09d3ac;
+.card {
+  display: block;
+  color: black;
+  text-align: left;
+  padding: 0.5em 1.25em;
+  cursor: pointer;
+}
+
+.card:hover {
+  background: rgb(250,250,250);
+}
+
+.card .card-top {
+  color: lightgray;
+}
+
+.card .card-bottom {
+  display: flex;
+}
+
+.card .card-bottom .card-bottom-item-large {
+  flex-grow: 2;
+}
+
+.card .card-bottom .card-bottom-item-small {
+  flex-grow: 1;
+}
+
+.card-container {
+  flex: 1;
+  overflow-y:auto;
+  margin: 0.25em 1.25em;
+  background: lightgray;
 }
