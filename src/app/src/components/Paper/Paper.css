@@ -1,0 +1,71 @@
+.paper {
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  background: lightgray;
+  margin: 0.25em 1.25em;
+}
+
+.paper-card {
+  display: block;
+  color: black;
+  text-align: left;
+  padding: 0.75em 1.25em 5em 0.75em;
+  background: white;
+  border: 0.1em solid;
+  flex: 1;
+}
+
+.paper-card .paper-card-header {
+  color: lightgray;
+}
+
+.paper-card .paper-card-item {
+  display: block;
+}
+
+.review-card-container-title {
+  border: 0.05em solid;
+  border-top: 0;
+  padding: 0.05em 1.25em;
+  background: rgb(250,250,250);
+}
+
+.review-card-container {
+  flex: 2;
+  overflow-y:auto;
+  background: lightgray;
+}
+
+.review-card {
+  display: block;
+  color: black;
+  background: white;
+  text-align: left;
+  padding: 0.75em 1.25em;
+  cursor: pointer;
+  border: 0.05em solid;
+  border-top: 0;
+}
+
+.review-card:hover {
+  background: rgb(250,250,250);
+}
+
+.review-card .review-card-top {
+  color: lightgray;
+  text-decoration: underline;
+}
+
+.review-card .review-card-bottom {
+  display: flex;
+}
+
+.review-card .review-card-bottom .review-card-bottom-item-large {
+  flex-grow: 2;
+}
+
+.review-card .review-card-bottom .review-card-bottom-item-small {
+  flex-grow: 1;
+}
