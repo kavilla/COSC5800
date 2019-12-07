@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_restplus import Api, Resource
 from config import db
-from models import Paper as P, PaperSchema, NotFoundException
+from models import Paper as P, PaperSchema, ReviewSchema, NotFoundException
 
 app = Flask(__name__)
 api = Api(app=app)
@@ -44,3 +44,21 @@ class Paper(Resource):
         """
         Edits a selected paper
         """
+
+@ns.route('/<int:paperid>/reviews')
+class PaperReviews(Resource):
+    def get(self, paperid):
+        """
+        Displays a paper's reviews
+        """
+        try:
+            # Serialize the data for the response
+            reviews = db.session.execute('SELECT * FROM reviews WHERE paperid = :paperid', {
+                'paperid': paperid
+            }).fetchmany()
+            if reviews == None:
+                raise NotFoundException
+            reviews_schema = ReviewSchema(many=True)
+            return reviews_schema.dump(reviews)
+        except NotFoundException as e:
+            ns.abort(404, e.__doc__, status = 'Could not find paper with paperid', statusCode = '404')
