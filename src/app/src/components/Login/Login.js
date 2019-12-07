@@ -24,6 +24,14 @@ export default class Login extends React.Component {
     });
   }
 
+  componentDidMount() {
+    AuthService.unauthorizedView();
+  }
+
+  componentWillUnmount() {
+    AuthService.authorizedView();
+  }
+
   validateForm() {
     return this.state.email.length > 0 && this.state.password.length > 0;
   }

@@ -17,6 +17,16 @@ const AuthService = {
     })
   },
 
+  authorizedView: function () {
+    document.getElementById('router-menu').style.display = 'flex';;
+    return Promise.resolve(true);
+  },
+
+  unauthorizedView: function () {
+    document.getElementById('router-menu').style.display = 'none';;
+    return Promise.resolve(true);
+  },
+
   login: function (email, password) {
     return axios
       .post(authUrl + 'login', {
