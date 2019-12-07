@@ -1,4 +1,4 @@
-export class UserModel {
+export default class UserModel {
 
   constructor(
     email,
