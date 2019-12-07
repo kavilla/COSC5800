@@ -10,7 +10,7 @@ export default class Home extends React.Component {
     this.state = {
       papers: [],
       toSpecificPaper: false
-    }
+    };
 
     PaperService.getPapers()
       .then(resp => {

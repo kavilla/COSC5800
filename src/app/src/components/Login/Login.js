@@ -13,10 +13,32 @@ export default class Login extends React.Component {
       password: "",
       toHome: false
     };
+
+    AuthService.getToken().then(resp => {
+      this.setState(() => ({
+        email: resp['email'],
+        password: resp['password']
+      }));
+
+      this.login();
+    });
   }
 
   validateForm() {
     return this.state.email.length > 0 && this.state.password.length > 0;
+  }
+
+  login() {
+    AuthService.login(this.state.email, this.state.password)
+      .then(resp => {
+        if (resp) {
+          this.setState(() => ({
+            toHome: true
+          }));
+        } else {
+          alert("Invalid email and/or password");
+        }
+      });
   }
 
   handleChange = event => {
@@ -28,21 +50,12 @@ export default class Login extends React.Component {
   handleSubmit = event => {
     event.preventDefault();
 
-    AuthService.login(this.state.email, this.state.password)
-      .then(resp => {
-        if (resp) {
-          this.setState(() => ({
-            toHome: true
-          }));
-        } else {
-          alert("Invalid email and/or password");
-        }
-      });
+    this.login();
   };
 
   render() {
     if (this.state.toHome) {
-      return <Redirect to="/" />;
+      return <Redirect to="/home" />;
     }
 
     return (

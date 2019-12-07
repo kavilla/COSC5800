@@ -26,7 +26,7 @@ export default class Settings extends React.Component {
 
   render() {
     if (this.state.toLogin) {
-      return <Redirect to="/login" />;
+      return <Redirect to="/" />;
     }
 
     return (
