@@ -14,15 +14,30 @@ import * as serviceWorker from "./serviceWorker";
 const routing = (
   <Router>
     <div className="router">
-      <Link to="/" className="router-link">Papers</Link>
-      <Link to="/" className="router-link">Your Papers</Link>
-      <Link to="/" className="router-link router-link-last">Your Reviews</Link>
-      <Link to="/settings" className="router-link router-link-settings">Settings</Link>
-      <Route exact path="/" component={Home} />
-      <Route path="/login" component={Login} />
-      <Route path="/signup" component={SignUp} />
-      <Route path="/paper" component={Paper} />
-      <Route path="/settings" component={Settings} />
+      <div className="router-menu">
+        <h5 className="router-menu-header">
+          Conference App
+        </h5>
+        <Link to="/" className="router-link">
+          Papers
+        </Link>
+        <Link to="/" className="router-link">
+          Your Papers
+        </Link>
+        <Link to="/" className="router-link router-link-last">
+          Your Reviews
+        </Link>
+        <Link to="/settings" className="router-link router-link-settings">
+          Settings
+        </Link>
+      </div>
+      <div className="router-view">
+        <Route exact path="/" component={Home} />
+        <Route path="/login" component={Login} />
+        <Route path="/signup" component={SignUp} />
+        <Route path="/paper" component={Paper} />
+        <Route path="/settings" component={Settings} />
+      </div>
     </div>
   </Router>
 );

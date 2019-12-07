@@ -14,9 +14,19 @@ code {
 
 .router {
   display: flex;
+}
+
+.router .router-menu {
+  display: flex;
   flex-direction: column;
-  flex: 1;
-  padding: 0.75em;
+  border-right: 0.05em solid;
+  background-color: rgb(240,240,240);
+}
+
+.router .router-menu-header {
+  color: black;
+  padding: 1.25em;
+  font-weight: bold;
 }
 
 .router .router-link {
@@ -24,6 +34,8 @@ code {
   padding: 0.1em 1em;
   border: 0.05em solid;
   border-bottom: 0;
+  border-right: 0;
+  background-color: white;
 }
 
 .router .router-link-last {
@@ -41,4 +53,8 @@ code {
 
 .router .router-link-settings:hover {
   background: none;
+}
+
+.router .router-view {
+  flex: 1;
 }
