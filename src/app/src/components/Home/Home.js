@@ -6,16 +6,27 @@ export default class Login extends React.Component {
   constructor(props) {
     super(props);
 
-    this.papers = [];
+    this.state = {
+      papers: []
+    }
+
     PaperService.get()
       .then(resp => {
-        this.papers = resp;
+        this.setState(() => ({
+          papers: resp
+        }));
       });
   }
 
+  handleCardClick = (paper) => {
+    console.log(paper)
+  };
+
   render() {
-    const paperCards = this.papers.map((paper) => (
-      <div className="card" key={ paper.paperid }>
+    const paperCards = this.state.papers.map((paper) => (
+      <div className="card"
+        key={ paper.paperid }
+        onClick={() => this.handleCardClick(paper)}>
         <div className="card-top">
           <h3>#{ paper.paperid }</h3>
         </div>
@@ -23,8 +34,12 @@ export default class Login extends React.Component {
           <h1>{ paper.title }</h1>
         </div>
         <div className="card-bottom">
-          <span className="card-bottom-item-small">Contact: { paper.contactauthoremail }</span>
-          <span className="card-bottom-item-large">Abstract: { paper.abstract }</span>
+          <span className="card-bottom-item-small">
+            Contact: { paper.contactauthoremail }
+          </span>
+          <span className="card-bottom-item-large">
+            Abstract: { paper.abstract }
+          </span>
         </div>
       </div>
     ));

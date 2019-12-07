@@ -11,6 +11,11 @@
   color: black;
   text-align: left;
   padding: 0.5em 1.25em;
+  cursor: pointer;
+}
+
+.card:hover {
+  background: rgb(250,250,250);
 }
 
 .card .card-top {
