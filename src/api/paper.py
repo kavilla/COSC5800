@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_restplus import Api, Resource
 from config import db
-from models import Paper as P, PaperSchema
+from models import Paper as P, PaperSchema, NotFoundException
 
 app = Flask(__name__)
 api = Api(app=app)
@@ -29,6 +29,18 @@ class Paper(Resource):
         """
         Displays a paper's details
         """
+        try:
+            # Serialize the data for the response
+            result = db.session.execute('SELECT * FROM paper WHERE paperid = :paperid', {
+                'paperid': paperid
+            }).fetchone()
+            if result == None:
+                raise NotFoundException
+            paper_schema = PaperSchema()
+            return paper_schema.dump(result)
+        except NotFoundException as e:
+            ns.abort(404, e.__doc__, status = 'Could not find participator with email and password', statusCode = '404')
+        return papers_schema.dump(papers)
     def put(self, paperid):
         """
         Edits a selected paper

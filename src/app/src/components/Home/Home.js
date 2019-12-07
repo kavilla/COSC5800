@@ -1,16 +1,18 @@
 import React from "react";
+import {Redirect} from "react-router-dom";
 import "./Home.css";
 import PaperService from "./../../services/PaperService";
 
-export default class Login extends React.Component {
+export default class Home extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      papers: []
+      papers: [],
+      toSpecificPaper: false
     }
 
-    PaperService.get()
+    PaperService.getPapers()
       .then(resp => {
         this.setState(() => ({
           papers: resp
@@ -19,10 +21,18 @@ export default class Login extends React.Component {
   }
 
   handleCardClick = (paper) => {
-    console.log(paper)
+    PaperService.setSelectedPaper(paper).then(() => {
+      this.setState(() => ({
+        toSpecificPaper: true
+      }));
+    });
   };
 
   render() {
+    if (this.state.toSpecificPaper) {
+      return <Redirect to="/paper" />;
+    }
+
     const paperCards = this.state.papers.map((paper) => (
       <div className="card"
         key={ paper.paperid }

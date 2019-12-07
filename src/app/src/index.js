@@ -7,6 +7,7 @@ import {Route, Link, BrowserRouter as Router} from "react-router-dom";
 import Home from "./components/Home/Home";
 import Login from "./components/Login/Login";
 import SignUp from "./components/SignUp/SignUp";
+import Paper from "./components/Paper/Paper";
 import * as serviceWorker from "./serviceWorker";
 
 const routing = (
@@ -14,7 +15,13 @@ const routing = (
     <div>
       <ul>
         <li>
-          <Link to="/">Home</Link>
+          <Link to="/">Papers</Link>
+        </li>
+        <li>
+          <Link to="/">Your Papers</Link>
+        </li>
+        <li>
+          <Link to="/">Your Reviews</Link>
         </li>
         <li>
           <Link to="/login">Login</Link>
@@ -23,6 +30,7 @@ const routing = (
       <Route exact path="/" component={Home} />
       <Route path="/login" component={Login} />
       <Route path="/signup" component={SignUp} />
+      <Route path="/paper" component={Paper} />
     </div>
   </Router>
 );
