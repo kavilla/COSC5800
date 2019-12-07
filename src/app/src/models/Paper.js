@@ -1,4 +1,4 @@
-export class PaperModel {
+export default class PaperModel {
 
   constructor(
     paperid,
