@@ -11,3 +11,34 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+.router {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 0.75em;
+}
+
+.router .router-link {
+  color: black;
+  padding: 0.1em 1em;
+  border: 0.05em solid;
+  border-bottom: 0;
+}
+
+.router .router-link-last {
+  border-bottom: 0.05em solid;
+}
+
+.router .router-link:hover {
+  text-decoration: none;
+  background: rgb(240,240,240);
+}
+
+.router .router-link-settings {
+  border: none;
+}
+
+.router .router-link-settings:hover {
+  background: none;
+}

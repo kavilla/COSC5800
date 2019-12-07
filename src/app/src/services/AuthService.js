@@ -18,6 +18,12 @@ const AuthService = {
       .catch(err => {
         return Promise.resolve(false);
       });
+  },
+
+  logout: function () {
+    localStorage.removeItem('email');
+    localStorage.removeItem('password');
+    return Promise.resolve(true);
   }
 }
 

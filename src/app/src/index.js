@@ -8,29 +8,21 @@ import Home from "./components/Home/Home";
 import Login from "./components/Login/Login";
 import SignUp from "./components/SignUp/SignUp";
 import Paper from "./components/Paper/Paper";
+import Settings from "./components/Settings/Settings"
 import * as serviceWorker from "./serviceWorker";
 
 const routing = (
   <Router>
-    <div>
-      <ul>
-        <li>
-          <Link to="/">Papers</Link>
-        </li>
-        <li>
-          <Link to="/">Your Papers</Link>
-        </li>
-        <li>
-          <Link to="/">Your Reviews</Link>
-        </li>
-        <li>
-          <Link to="/login">Login</Link>
-        </li>
-      </ul>
+    <div className="router">
+      <Link to="/" className="router-link">Papers</Link>
+      <Link to="/" className="router-link">Your Papers</Link>
+      <Link to="/" className="router-link router-link-last">Your Reviews</Link>
+      <Link to="/settings" className="router-link router-link-settings">Settings</Link>
       <Route exact path="/" component={Home} />
       <Route path="/login" component={Login} />
       <Route path="/signup" component={SignUp} />
       <Route path="/paper" component={Paper} />
+      <Route path="/settings" component={Settings} />
     </div>
   </Router>
 );
