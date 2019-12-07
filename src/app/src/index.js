@@ -8,29 +8,36 @@ import Home from "./components/Home/Home";
 import Login from "./components/Login/Login";
 import SignUp from "./components/SignUp/SignUp";
 import Paper from "./components/Paper/Paper";
+import Settings from "./components/Settings/Settings"
 import * as serviceWorker from "./serviceWorker";
 
 const routing = (
   <Router>
-    <div>
-      <ul>
-        <li>
-          <Link to="/">Papers</Link>
-        </li>
-        <li>
-          <Link to="/">Your Papers</Link>
-        </li>
-        <li>
-          <Link to="/">Your Reviews</Link>
-        </li>
-        <li>
-          <Link to="/login">Login</Link>
-        </li>
-      </ul>
-      <Route exact path="/" component={Home} />
-      <Route path="/login" component={Login} />
-      <Route path="/signup" component={SignUp} />
-      <Route path="/paper" component={Paper} />
+    <div className="router">
+      <div className="router-menu" id="router-menu">
+        <h5 className="router-menu-header">
+          Conference App
+        </h5>
+        <Link to="/home" className="router-link">
+          Papers
+        </Link>
+        <Link to="/home" className="router-link">
+          Your Papers
+        </Link>
+        <Link to="/home" className="router-link router-link-last">
+          Your Reviews
+        </Link>
+        <Link to="/settings" className="router-link router-link-settings">
+          Settings
+        </Link>
+      </div>
+      <div className="router-view">
+        <Route exact path="/" component={Login} />
+        <Route path="/home" component={Home} />
+        <Route path="/signup" component={SignUp} />
+        <Route path="/paper" component={Paper} />
+        <Route path="/settings" component={Settings} />
+      </div>
     </div>
   </Router>
 );

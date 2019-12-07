@@ -11,3 +11,52 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+.router {
+  display: flex;
+}
+
+.router .router-menu {
+  display: flex;
+  flex-direction: column;
+  border-right: 0.05em solid;
+  background-color: rgb(240,240,240);
+}
+
+.router .router-menu-header {
+  color: black;
+  padding: 1.25em;
+  font-weight: bold;
+}
+
+.router .router-link {
+  color: black;
+  padding: 0.1em 1em;
+  border: 0.05em solid;
+  border-bottom: 0;
+  border-right: 0;
+  border-left: 0;
+  background-color: white;
+}
+
+.router .router-link-last {
+  border-bottom: 0.05em solid;
+}
+
+.router .router-link:hover {
+  text-decoration: none;
+  background: rgb(240,240,240);
+}
+
+.router .router-link-settings {
+  border: none;
+}
+
+.router .router-link-settings:hover {
+  background: none;
+}
+
+.router .router-view {
+  flex: 1;
+  height: 100vh;
+}

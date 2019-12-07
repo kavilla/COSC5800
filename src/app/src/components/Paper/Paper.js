@@ -7,6 +7,7 @@ export default class Paper extends React.Component {
     super(props);
 
     this.state = {
+      isLoading: true,
       paper: null,
       reviews: []
     }
@@ -16,6 +17,7 @@ export default class Paper extends React.Component {
         PaperService.getReviewsForPaper(paper).then(
           reviews => {
             this.setState(() => ({
+              isLoading: false,
               paper: paper,
               reviews: reviews
             }));
@@ -25,7 +27,12 @@ export default class Paper extends React.Component {
   }
 
   render() {
-    const paperCard = this.state.paper !== null ?
+    const loadingSpinner = this.state.isLoading ?
+      <div>
+        Loading
+      </div> : null;
+
+    const paperCard = !this.state.isLoading && this.state.paper !== null ?
       <div className="paper-card">
         <h3 className="paper-card-header">#{ this.state.paper.paperid }</h3>
         <h1 className="paper-card-item">{ this.state.paper.title }</h1>
@@ -43,7 +50,12 @@ export default class Paper extends React.Component {
         </span>
       </div> : null;
 
-    const reviewCards = this.state.reviews.map((review) => (
+    const reviewHeader = !this.state.isLoading ?
+      <div className="review-card-container-title">
+        <h4>Reviews</h4>
+      </div> : null;
+
+    const reviewCards = !this.state.isLoading && this.state.reviews.map((review) => (
       <div className="review-card"
         key={ review.revemail + "_" + review.paperid }>
         <div className="review-card-top">
@@ -75,8 +87,8 @@ export default class Paper extends React.Component {
     return (
       <div className="paper">
         { paperCard }
-        <div className="review-card-container-title">
-          <h4>Reviews</h4>
+        <div>
+          { reviewHeader }
         </div>
         <div className="review-card-container ">
           { reviewCards }
