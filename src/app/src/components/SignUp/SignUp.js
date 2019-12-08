@@ -10,8 +10,8 @@ export default class SignUp extends React.Component {
 
     this.state = {
       email: "",
-      password: "",
-      confirmPassword: "",
+      password: null,
+      confirmPassword: null,
       firstname: "",
       mi: "",
       lastname: "",
@@ -23,7 +23,14 @@ export default class SignUp extends React.Component {
   }
 
   validateForm() {
-    return this.state.email.length > 0 && this.state.password.length > 0;
+    let isFormValid = true;
+
+    isFormValid = isFormValid && this.state.email.length > 0 ;
+    isFormValid = isFormValid && this.state.firstname.length > 0;
+    isFormValid = isFormValid && this.state.lastname.length > 0;
+    isFormValid = isFormValid && this.state.password === this.state.confirmPassword;
+    isFormValid = isFormValid && (this.state.isAuthor || this.state.isReviewer);
+    return isFormValid;
   }
 
   handleChange = event => {
@@ -71,16 +78,18 @@ export default class SignUp extends React.Component {
                     type="text"
                     value={this.state.firstname}
                     onChange={this.handleChange}
+                    placeholder="Required"
                   />
                 </FormGroup>
                 <FormGroup
                   className="signup-item-name-item-small"
-                  controlId="middle-init">
+                  controlId="minit">
                   <FormLabel>MI</FormLabel>
                   <FormControl
-                    value={this.state.mi}
+                    value={this.state.minit}
                     onChange={this.handleChange}
                     type="text"
+                    placeholder="Optional"
                   />
                 </FormGroup>
                 <FormGroup
@@ -91,6 +100,7 @@ export default class SignUp extends React.Component {
                     value={this.state.lastname}
                     onChange={this.handleChange}
                     type="text"
+                    placeholder="Required"
                   />
                 </FormGroup>
               </div>
@@ -100,6 +110,7 @@ export default class SignUp extends React.Component {
                   value={this.state.phone}
                   onChange={this.handleChange}
                   type="text"
+                  placeholder="Optional (Format: ##########)"
                 />
               </FormGroup>
               <FormGroup controlId="affiliation">
@@ -108,6 +119,7 @@ export default class SignUp extends React.Component {
                   value={this.state.affiliation}
                   onChange={this.handleChange}
                   type="text"
+                  placeholder="Optional"
                 />
               </FormGroup>
               <h3>
@@ -152,6 +164,7 @@ export default class SignUp extends React.Component {
                   type="email"
                   value={this.state.email}
                   onChange={this.handleChange}
+                  placeholder="Required"
                 />
               </FormGroup>
               <FormGroup controlId="password">
@@ -160,6 +173,7 @@ export default class SignUp extends React.Component {
                   value={this.state.password}
                   onChange={this.handleChange}
                   type="password"
+                  placeholder="Optional"
                 />
               </FormGroup>
               <FormGroup controlId="confirm-password">
@@ -168,6 +182,7 @@ export default class SignUp extends React.Component {
                   value={this.state.confirmPassword}
                   onChange={this.handleChange}
                   type="password"
+                  placeholder="Optional"
                 />
               </FormGroup>
               <Button

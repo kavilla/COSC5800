@@ -41,11 +41,11 @@
 }
 
 .signup .signup-container .signup-item .signup-item-name .signup-item-name-item-large {
-  flex: 2;
+  flex: 3;
 }
 
 .signup .signup-container .signup-item .signup-item-name .signup-item-name-item-small {
-  flex: 1;
+  flex: 2;
   padding-left: 1em;
   padding-right: 1em;
 }

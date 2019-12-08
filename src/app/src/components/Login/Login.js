@@ -10,7 +10,7 @@ export default class Login extends React.Component {
 
     this.state = {
       email: "",
-      password: "",
+      password: null,
       toHome: false
     };
 
@@ -33,7 +33,7 @@ export default class Login extends React.Component {
   }
 
   validateForm() {
-    return this.state.email.length > 0 && this.state.password.length > 0;
+    return this.state.email.length > 0;
   }
 
   login() {
