@@ -10,7 +10,7 @@ export default class Login extends React.Component {
 
     this.state = {
       email: "",
-      password: "",
+      password: null,
       toHome: false
     };
 
@@ -33,7 +33,7 @@ export default class Login extends React.Component {
   }
 
   validateForm() {
-    return this.state.email.length > 0 && this.state.password.length > 0;
+    return this.state.email.length > 0;
   }
 
   login() {
@@ -67,8 +67,9 @@ export default class Login extends React.Component {
     }
 
     return (
-      <div className="Login">
+      <div className="login">
         <form onSubmit={this.handleSubmit}>
+          <h1>Conference App</h1>
           <FormGroup controlId="email">
             <FormLabel>Email</FormLabel>
             <FormControl

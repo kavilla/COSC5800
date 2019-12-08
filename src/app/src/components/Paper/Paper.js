@@ -27,11 +27,6 @@ export default class Paper extends React.Component {
   }
 
   render() {
-    const loadingSpinner = this.state.isLoading ?
-      <div>
-        Loading
-      </div> : null;
-
     const paperCard = !this.state.isLoading && this.state.paper !== null ?
       <div className="paper-card">
         <h3 className="paper-card-header">#{ this.state.paper.paperid }</h3>
