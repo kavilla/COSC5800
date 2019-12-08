@@ -1,0 +1,77 @@
+.signup {
+  height: 100vh;
+  padding: 14em 0;
+}
+
+.signup h1 {
+  text-align: center;
+  padding-bottom: 0.25em;
+  display: block;
+}
+
+.signup .signup-container {
+  display: flex;
+  align-items: center;
+}
+
+.signup .signup-container .signup-item {
+  flex: 1;
+  padding:1.25em;
+  max-width: 30em;
+  margin: auto;
+}
+
+.signup .signup-container .signup-item form {
+  margin: 0 auto;
+  max-width: 30em;
+}
+
+.signup .signup-container .signup-item div {
+  margin: 8px auto;
+  max-width: 30em;
+}
+
+.signup .signup-container .signup-item div span {
+  padding-right: 8px;
+}
+
+.signup .signup-container .signup-item .signup-item-name {
+  display: flex;
+  flex-direction: row;
+}
+
+.signup .signup-container .signup-item .signup-item-name .signup-item-name-item-large {
+  flex: 2;
+}
+
+.signup .signup-container .signup-item .signup-item-name .signup-item-name-item-small {
+  flex: 1;
+  padding-left: 1em;
+  padding-right: 1em;
+}
+
+.signup .signup-container .signup-item  .signup-item-sublabel {
+  color: lightgray;
+}
+
+.signup .signup-container .signup-item .signup-checkbox-container {
+  display: flex;
+  flex-direction: row;
+}
+
+.signup .signup-container .signup-item .signup-checkbox {
+  height: 1.25em;
+  flex: 1;
+  margin-top: 0.3em;
+}
+
+.signup .signup-container .signup-item .signup-checkbox-label {
+  flex: 15;
+  padding-left: 0.5em;
+  font-size: 1.25rem;
+  margin-bottom: 0;
+}
+
+.signup .signup-container .signup-item .signup-checkbox:focus {
+  box-shadow: none;
+}

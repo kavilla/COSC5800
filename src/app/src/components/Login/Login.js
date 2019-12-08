@@ -67,8 +67,9 @@ export default class Login extends React.Component {
     }
 
     return (
-      <div className="Login">
+      <div className="login">
         <form onSubmit={this.handleSubmit}>
+          <h1>Conference App</h1>
           <FormGroup controlId="email">
             <FormLabel>Email</FormLabel>
             <FormControl
