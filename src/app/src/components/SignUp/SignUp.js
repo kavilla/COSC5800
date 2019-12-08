@@ -10,7 +10,15 @@ export default class SignUp extends React.Component {
 
     this.state = {
       email: "",
-      password: ""
+      password: "",
+      confirmPassword: "",
+      firstname: "",
+      mi: "",
+      lastname: "",
+      phone: "",
+      affiliation: "",
+      isAuthor: false,
+      isReviewer: false
     };
   }
 
@@ -19,13 +27,23 @@ export default class SignUp extends React.Component {
   }
 
   handleChange = event => {
+    const targetId = event.target.id;
+    if (targetId === 'isAuthor' || targetId === 'isReviewer') {
+      this.setState({
+        [targetId]: event.target.checked
+      });
+      return;
+    }
+
     this.setState({
-      [event.target.id]: event.target.value
+      [targetId]: event.target.value
     });
   };
 
   handleSubmit = event => {
     event.preventDefault();
+
+    console.log(this.state);
   };
 
   componentDidMount() {
@@ -99,7 +117,7 @@ export default class SignUp extends React.Component {
                 Select one or many
               </span>
               <FormGroup
-                controlId="author"
+                controlId="isAuthor"
                 className="signup-checkbox-container">
                 <FormControl
                   value={this.state.isAuthor}
@@ -112,7 +130,7 @@ export default class SignUp extends React.Component {
                 </FormLabel>
               </FormGroup>
               <FormGroup
-                controlId="reviewer"
+                controlId="isReviewer"
                 className="signup-checkbox-container">
                 <FormControl
                   value={this.state.isReviewer}
@@ -121,7 +139,7 @@ export default class SignUp extends React.Component {
                   className="signup-checkbox"
                 />
                 <FormLabel className="signup-checkbox-label">
-                  Review
+                  Reviewer
                 </FormLabel>
               </FormGroup>
             </form>
@@ -154,7 +172,6 @@ export default class SignUp extends React.Component {
               </FormGroup>
               <Button
                 block
-                bsSize="large"
                 disabled={!this.validateForm()}
                 type="submit"
               >

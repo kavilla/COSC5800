@@ -1,6 +1,6 @@
 import React from "react";
-import {Button, FormGroup, FormControl, FormLabel} from "react-bootstrap";
-import {Redirect, Link} from "react-router-dom";
+import {Button} from "react-bootstrap";
+import {Redirect} from "react-router-dom";
 import "./Settings.css";
 import AuthService from "./../../services/AuthService";
 
