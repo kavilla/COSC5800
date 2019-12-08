@@ -10,7 +10,7 @@ const AuthService = {
   getToken: function () {
     const email = localStorage.getItem('email');
     const password = localStorage.getItem('password');
-    if (email === null || password === null) {
+    if (email === null) {
       return Promise.reject();
     }
 
@@ -37,8 +37,20 @@ const AuthService = {
         password: password
       })
       .then(resp => {
-        localStorage.setItem('email', email);
-        localStorage.setItem('password', password);
+        const data = resp['data'];
+        currentParticipator = new ParticipatorModel(
+          data['email'],
+          data['password'],
+          data['firstname'],
+          data['minit'],
+          data['lastname'],
+          data['phone'],
+          data['affiliation'],
+          data['isAuthor'],
+          data['isReviewer']
+        );
+        localStorage.setItem('email', currentParticipator.email);
+        localStorage.setItem('password', currentParticipator.password);
         return Promise.resolve(true);
       })
       .catch(err => {

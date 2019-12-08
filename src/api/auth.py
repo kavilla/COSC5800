@@ -40,11 +40,14 @@ class AuthLogin(Resource):
         try:
             data = request.get_json(force=True)
 
-            # Serialize the data for the response
-            result = db.session.execute('SELECT * FROM participator WHERE email = :email AND password = :password', {
+            query = 'SELECT * FROM participator WHERE email = :email AND password = :password' if data['password'] != None else 'SELECT * FROM participator WHERE email = :email AND password IS NULL'
+            result = db.session.execute(query, {
                 'email': data['email'],
                 'password': data['password']
             }).fetchone()
+
+            if result == None:
+                raise NotFoundException
 
             authorResult = db.session.execute('SELECT * FROM author WHERE email = :email', {
                 'email': data['email']
@@ -53,20 +56,20 @@ class AuthLogin(Resource):
             reviewerResult = db.session.execute('SELECT * FROM reviewer WHERE email = :email', {
                 'email': data['email']
             }).fetchone()
-            if result == None:
-                raise NotFoundException
+
             return {
-                'email': data['email'],
-                'firstname': data['firstname'],
-                'minit': data['minit'],
-                'lastname': data['lastname'],
-                'phone': data['phone'],
-                'affiliation': data['affiliation'],
-                'password': data['password'],
+                'email': result['email'],
+                'firstname': result['firstname'],
+                'minit': result['minit'],
+                'lastname': result['lastname'],
+                'phone': result['phone'],
+                'affiliation': result['affiliation'],
+                'password': result['password'],
                 'isAuthor': authorResult != None,
                 'isReviewer': reviewerResult != None
             }
         except NotFoundException as e:
+            app.logger.error(e)
             ns.abort(404, e.__doc__, status = 'Could not find participator with email and password', statusCode = '404')
         except Exception as e:
             app.logger.error(e)
@@ -123,16 +126,15 @@ class AuthSignUp(Resource):
             }).fetchone()
 
             return {
-                'email': data['email'],
-                'firstname': data['firstname'],
-                'minit': data['minit'],
-                'lastname': data['lastname'],
-                'phone': data['phone'],
-                'affiliation': data['affiliation'],
-                'password': data['password'],
+                'email': result['email'],
+                'firstname': result['firstname'],
+                'minit': result['minit'],
+                'lastname': result['lastname'],
+                'phone': result['phone'],
+                'affiliation': result['affiliation'],
+                'password': result['password'],
                 'isAuthor': authorResult != None,
                 'isReviewer': reviewerResult != None
             }
         except Exception as e:
-            app.logger.error(e)
             ns.abort(400, e.__doc__, status = 'Could not retrieve information', statusCode = '400')
