@@ -1,8 +1,9 @@
 import React from "react";
 import {Button, FormGroup, FormControl, FormLabel} from "react-bootstrap";
-import {Link} from "react-router-dom";
+import {Redirect, Link} from "react-router-dom";
 import "./SignUp.css";
 import AuthService from "./../../services/AuthService";
+import ParticipatorModel from './../../models/Participator';
 
 export default class SignUp extends React.Component {
   constructor(props) {
@@ -13,12 +14,13 @@ export default class SignUp extends React.Component {
       password: null,
       confirmPassword: null,
       firstname: "",
-      mi: "",
+      minit: null,
       lastname: "",
-      phone: "",
-      affiliation: "",
+      phone: null,
+      affiliation: null,
       isAuthor: false,
-      isReviewer: false
+      isReviewer: false,
+      toHome: false
     };
   }
 
@@ -27,6 +29,9 @@ export default class SignUp extends React.Component {
 
     isFormValid = isFormValid && this.state.email.length > 0 ;
     isFormValid = isFormValid && this.state.firstname.length > 0;
+    if (this.state.minit !== null) {
+      isFormValid = isFormValid && this.state.minit.length <= 1;
+    }
     isFormValid = isFormValid && this.state.lastname.length > 0;
     isFormValid = isFormValid && this.state.password === this.state.confirmPassword;
     isFormValid = isFormValid && (this.state.isAuthor || this.state.isReviewer);
@@ -50,7 +55,23 @@ export default class SignUp extends React.Component {
   handleSubmit = event => {
     event.preventDefault();
 
-    console.log(this.state);
+    AuthService.signup(new ParticipatorModel(
+      this.state.email,
+      this.state.password,
+      this.state.firstname,
+      this.state.minit,
+      this.state.lastname,
+      this.state.phone,
+      this.state.affiliation,
+      this.state.isAuthor,
+      this.state.isReviewer
+    )).then(resp => {
+      if (resp) {
+        this.setState(() => ({
+          toHome: true
+        }));
+      }
+    })
   };
 
   componentDidMount() {
@@ -62,6 +83,10 @@ export default class SignUp extends React.Component {
   }
 
   render() {
+    if (this.state.toHome) {
+      return <Redirect to="/home" />;
+    }
+
     return (
       <div className="signup">
         <h1>Sign Up</h1>
@@ -176,7 +201,7 @@ export default class SignUp extends React.Component {
                   placeholder="Optional"
                 />
               </FormGroup>
-              <FormGroup controlId="confirm-password">
+              <FormGroup controlId="confirmPassword">
                 <FormLabel>Confirm Password</FormLabel>
                 <FormControl
                   value={this.state.confirmPassword}
