@@ -6,6 +6,24 @@ const authUrl = Config.BASE_URL + 'auth/';
 
 let currentParticipator = null;
 
+function authorizeUser(data) {
+  currentParticipator = new ParticipatorModel(
+    data['email'],
+    data['password'],
+    data['firstname'],
+    data['minit'],
+    data['lastname'],
+    data['phone'],
+    data['affiliation'],
+    data['isAuthor'],
+    data['isReviewer']
+  );
+  localStorage.setItem('email', currentParticipator.email);
+  if (currentParticipator.password !== null) {
+    localStorage.setItem('password', currentParticipator.password);
+  }
+}
+
 const AuthService = {
   getToken: function () {
     const email = localStorage.getItem('email');
@@ -22,6 +40,15 @@ const AuthService = {
 
   authorizedView: function () {
     document.getElementById('router-menu').style.display = 'flex';;
+    if (currentParticipator !== null) {
+      if (!currentParticipator.isAuthor) {
+        document.getElementById('router-menu-yourpapers').style.display = 'none';
+      }
+
+      if (!currentParticipator.isReviewer) {
+        //  document.getElementById('router-menu-yourreviews').style.display = 'none';
+      }
+    }
     return Promise.resolve(true);
   },
 
@@ -38,21 +65,7 @@ const AuthService = {
       })
       .then(resp => {
         const data = resp['data'];
-        currentParticipator = new ParticipatorModel(
-          data['email'],
-          data['password'],
-          data['firstname'],
-          data['minit'],
-          data['lastname'],
-          data['phone'],
-          data['affiliation'],
-          data['isAuthor'],
-          data['isReviewer']
-        );
-        localStorage.setItem('email', currentParticipator.email);
-        if (currentParticipator.password !== null) {
-          localStorage.setItem('password', currentParticipator.password);
-        }
+        authorizeUser(data);
         return Promise.resolve(true);
       })
       .catch(err => {
@@ -81,21 +94,7 @@ const AuthService = {
       })
       .then(resp => {
         const data = resp['data'];
-        currentParticipator = new ParticipatorModel(
-          data['email'],
-          data['password'],
-          data['firstname'],
-          data['minit'],
-          data['lastname'],
-          data['phone'],
-          data['affiliation'],
-          data['isAuthor'],
-          data['isReviewer']
-        );
-        localStorage.setItem('email', currentParticipator.email);
-        if (currentParticipator.password !== null) {
-          localStorage.setItem('password', currentParticipator.password);
-        }
+        authorizeUser(data);
         return Promise.resolve(true);
       })
       .catch(err => {
