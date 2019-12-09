@@ -50,7 +50,9 @@ const AuthService = {
           data['isReviewer']
         );
         localStorage.setItem('email', currentParticipator.email);
-        localStorage.setItem('password', currentParticipator.password);
+        if (currentParticipator.password !== null) {
+          localStorage.setItem('password', currentParticipator.password);
+        }
         return Promise.resolve(true);
       })
       .catch(err => {
@@ -91,7 +93,9 @@ const AuthService = {
           data['isReviewer']
         );
         localStorage.setItem('email', currentParticipator.email);
-        localStorage.setItem('password', currentParticipator.password);
+        if (currentParticipator.password !== null) {
+          localStorage.setItem('password', currentParticipator.password);
+        }
         return Promise.resolve(true);
       })
       .catch(err => {
