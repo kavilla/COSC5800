@@ -5,6 +5,8 @@ import {Button} from "react-bootstrap";
 import {Redirect} from "react-router-dom";
 import PaperService from "./../../services/PaperService";
 import AuthService from "./../../services/AuthService";
+import ReviewService from "./../../services/ReviewService";
+import ReviewModel from "./../../models/Review";
 
 export default class Paper extends React.Component {
   constructor(props) {
@@ -15,17 +17,24 @@ export default class Paper extends React.Component {
       toHome: false,
       paper: null,
       reviews: [],
-      isReviewer: false,
-      showModal: false
+      showModal: false,
+      review: {
+        techmerit: 10,
+        readability: 10,
+        originality: 10,
+        relavance: 10,
+        overallrecomm: 10,
+        commentforcommittee: null,
+        commentforauthor: null
+      },
+      currentParticipator: null
     }
 
     AuthService.getCurrentParticipator()
       .then(currentParticipator => {
-        if (currentParticipator.isReviewer) {
-          this.setState(() => ({
-            isReviewer: true
-          }));
-        }
+        this.setState(() => ({
+          currentParticipator: currentParticipator
+        }));
 
         PaperService.getSelectedPaper()
           .then(paper => {
@@ -59,6 +68,33 @@ export default class Paper extends React.Component {
     this.setState(() => ({
       showModal: false
     }));
+  };
+
+  handleChange = (event) => {
+    this.setState({
+      ['review.' + event.target.id]: event.target.value
+    });
+  }
+
+  handleSubmit = () => {
+    ReviewService.createReview(new ReviewModel(
+      this.state.currentParticipator.email,
+      this.state.paper.paperid,
+      this.state.review.techmerit,
+      this.state.review.readability,
+      this.state.review.originality,
+      this.state.review.relavance,
+      this.state.review.overallrecomm,
+      this.state.review.commentforcommittee,
+      this.state.review.commentforauthor
+    )).then(reviews => {
+        this.setState(() => ({
+          reviews: reviews,
+          showModal: false
+        }));
+    }).catch(err => {
+      alert(err);
+    });
   };
 
   render() {
@@ -118,7 +154,7 @@ export default class Paper extends React.Component {
       </div>
     ));
 
-    const addReviewButton = !this.state.isLoading && this.state.isReviewer ?
+    const addReviewButton = !this.state.isLoading && this.state.currentParticipator !== null && this.state.currentParticipator.isReviewer ?
     <div
       className="add-review-button-container btn-primary"
       onClick={() => this.handleShowModal()}>
@@ -151,7 +187,8 @@ export default class Paper extends React.Component {
                 type="range"
                 name="techmerit"
                 min="1"
-                max="10"/>
+                max="10"
+                onChange={this.handleChange}/>
             </div>
           </div>
           <div className="app-modal-item">
@@ -195,16 +232,16 @@ export default class Paper extends React.Component {
             </div>
           </div>
           <textarea
-            maxlength="120"
+            maxLength="120"
             placeholder="Comment for committee..."
             className="app-modal-item">
           </textarea>
           <textarea
-            maxlength="120"
+            maxLength="120"
             placeholder="Comment for author..."
             className="app-modal-item">
           </textarea>
-          <Button>
+          <Button onClick={() => this.handleSubmit()}>
             Submit
           </Button>
         </div>

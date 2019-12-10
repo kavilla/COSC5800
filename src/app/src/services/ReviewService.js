@@ -50,6 +50,34 @@ const ReviewService = {
       .catch(err => {
         return Promise.resolve([]);
       });
+  },
+
+  createReview: function (review) {
+    return axios
+      .post(reviewUrl, review)
+      .then(resp => {
+        const participatorReviews = resp.data.map(x =>
+          new ReviewModel(
+            x['revemail'],
+            x['paperid'],
+            x['techmerit'],
+            x['readability'],
+            x['originality'],
+            x['relavance'],
+            x['overallrecomm'],
+            x['commentforcommittee'],
+            x['commentforauthor']
+          )
+        );
+        return Promise.resolve(participatorReviews);
+      })
+      .catch(err => {
+        if (err === null && err.data === null) {
+          return Promise.reject(err);
+        }
+
+        return Promise.reject(err.response.data.status);
+      });
   }
 }
 
