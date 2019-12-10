@@ -2,6 +2,7 @@ import React from "react";
 import {Redirect} from "react-router-dom";
 import "./YourPapers.css";
 import PaperService from "./../../services/PaperService";
+import AuthService from "./../../services/AuthService";
 
 export default class YourPapers extends React.Component {
   constructor(props) {
@@ -12,12 +13,16 @@ export default class YourPapers extends React.Component {
       toSpecificPaper: false
     };
 
-    PaperService.getPapers()
-      .then(resp => {
-        this.setState(() => ({
-          papers: resp
-        }));
+    AuthService.getCurrentParticipator()
+      .then(currentParticipator => {
+        PaperService.getPapersForParticipator(currentParticipator)
+          .then(resp => {
+            this.setState(() => ({
+              papers: resp
+            }));
+          })
       });
+
   }
 
   handleCardClick = (paper) => {

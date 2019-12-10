@@ -38,8 +38,29 @@ const AuthService = {
     })
   },
 
+  getCurrentParticipator: function () {
+    if (currentParticipator === null) {
+      const email = localStorage.getItem('email');
+      const password = localStorage.getItem('password');
+      if (email === null) {
+        return Promise.reject();
+      }
+
+      return this.login(email, password)
+        .then(authorized => {
+          if (!authorized) {
+            return Promise.reject();
+          }
+          return Promise.resolve(currentParticipator);
+        }
+      );
+    }
+
+    return Promise.resolve(currentParticipator)
+  },
+
   authorizedView: function () {
-    document.getElementById('router-menu').style.display = 'flex';;
+    document.getElementById('router-menu').style.display = 'flex';
     if (currentParticipator !== null) {
       if (!currentParticipator.isAuthor) {
         document.getElementById('router-menu-yourpapers').style.display = 'none';
