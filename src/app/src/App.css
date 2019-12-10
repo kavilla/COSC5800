@@ -20,3 +20,35 @@
 .App-link {
   color: #09d3ac;
 }
+
+.app-modal-container {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.app-modal {
+  display: flex;
+  flex-direction: column;
+  width: 40em;
+  height: 40em;
+  background: white;
+  padding: 2em;
+  border-radius: 2%;
+  box-shadow: 0.25em 0.5em 0.75em rgba(0, 0, 0, 0.55);
+}
+
+.app-modal-close-button {
+  height: 3em;
+  width: 3em;
+  border-radius: 50%;
+  border: 0.05em solid lightgray;
+  color: lightgray;
+}

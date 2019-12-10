@@ -1,5 +1,6 @@
 import React from "react";
 import "./Paper.css";
+import "./../../App.css";
 import {Button} from "react-bootstrap";
 import {Redirect} from "react-router-dom";
 import PaperService from "./../../services/PaperService";
@@ -13,7 +14,8 @@ export default class Paper extends React.Component {
       isLoading: true,
       toHome: false,
       paper: null,
-      reviews: []
+      reviews: [],
+      showModal: false
     }
 
     AuthService.getCurrentParticipator()
@@ -24,6 +26,7 @@ export default class Paper extends React.Component {
               this.setState(() => ({
                 toHome: true
               }));
+              return;
             }
 
             PaperService.getReviewsForPaper(paper).then(
@@ -38,6 +41,18 @@ export default class Paper extends React.Component {
           });
       });
   }
+
+  handleShowModal = () => {
+    this.setState(() => ({
+      showModal: true
+    }));
+  };
+
+  handleHideModal = () => {
+    this.setState(() => ({
+      showModal: false
+    }));
+  };
 
   render() {
     if (this.state.toHome) {
@@ -96,6 +111,32 @@ export default class Paper extends React.Component {
       </div>
     ));
 
+    const addReviewModal = this.state.showModal ?
+      <div className="app-modal-container">
+        <div className="app-modal">
+          <Button
+            className="app-modal-close-button btn-light"
+            onClick={() => this.handleHideModal()}>
+              X
+          </Button>
+          <h3 className="modal-header">#{ this.state.paper.paperid }</h3>
+          <h1 className="modal-item">{ this.state.paper.title }</h1>
+          <span className="modal-item">
+            Contact: { this.state.paper.contactauthoremail }
+          </span>
+          <span className="modal-item">
+            Average Overall Score: TODO
+          </span>
+          <span className="modal-item">
+            Filename: { this.state.paper.filename }
+          </span>
+          <span className="modal-item">
+            Abstract: { this.state.paper.abstract }
+          </span>
+        </div>
+      </div> : null;
+
+
     return (
       <div className="paper">
         { paperCard }
@@ -105,10 +146,15 @@ export default class Paper extends React.Component {
         <div className="review-card-container ">
           { reviewCards }
         </div>
-        <div className="add-review-button-container btn-primary">
+        <div
+          className="add-review-button-container btn-primary"
+          onClick={() => this.handleShowModal()}>
           <span>
             +
           </span>
+        </div>
+        <div>
+          { addReviewModal }
         </div>
       </div>
     )
