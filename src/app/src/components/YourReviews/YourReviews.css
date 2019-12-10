@@ -1,0 +1,43 @@
+.your-reviews {
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.your-reviews .card-container {
+  flex: 1;
+  overflow-y:auto;
+  margin: 0.25em 1.25em;
+  background: lightgray;
+}
+
+.your-reviews .card {
+  display: block;
+  color: black;
+  background: white;
+  text-align: left;
+  padding: 0.75em 1.25em;
+}
+
+.your-reviews .card .card-top {
+  color: gray;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.your-reviews .card .card-top:hover {
+  color: black;
+}
+
+.your-reviews .card .card-bottom {
+  display: flex;
+}
+
+.your-reviews .card .card-bottom .card-bottom-item-large {
+  flex-grow: 2;
+}
+
+.your-reviews .card .card-bottom .card-bottom-item-small {
+  flex-grow: 1;
+}

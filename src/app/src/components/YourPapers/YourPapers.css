@@ -5,7 +5,14 @@
   flex-direction: column;
 }
 
-.card {
+.your-papers .card-container {
+  flex: 1;
+  overflow-y:auto;
+  margin: 0.25em 1.25em;
+  background: lightgray;
+}
+
+.your-papers .card {
   display: block;
   color: black;
   text-align: left;
@@ -13,29 +20,22 @@
   cursor: pointer;
 }
 
-.card:hover {
+.your-papers .card:hover {
   background: rgb(250,250,250);
 }
 
-.card .card-top {
+.your-papers .card .card-top {
   color: lightgray;
 }
 
-.card .card-bottom {
+.your-papers .card .card-bottom {
   display: flex;
 }
 
-.card .card-bottom .card-bottom-item-large {
+.your-papers .card .card-bottom .card-bottom-item-large {
   flex-grow: 2;
 }
 
-.card .card-bottom .card-bottom-item-small {
+.your-papers .card .card-bottom .card-bottom-item-small {
   flex-grow: 1;
-}
-
-.card-container {
-  flex: 1;
-  overflow-y:auto;
-  margin: 0.25em 1.25em;
-  background: lightgray;
 }

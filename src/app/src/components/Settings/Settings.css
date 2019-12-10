@@ -1,10 +1,43 @@
-@media all and (min-width: 480px) {
-  .Settings {
-    padding: 60px 0;
-  }
+.settings {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  margin: 0.25em 1.25em;
+}
 
-  .Settings div {
-    margin: 8px auto;
-    max-width: 320px;
-  }
+.settings .card-container {
+  flex: 1;
+  overflow-y: auto;
+  margin: 0.25em 1.25em;
+  background: none;
+  align-items: center;
+}
+
+.settings .card .card-header {
+  background: white;
+}
+
+.settings .card {
+  display: block;
+  color: black;
+  text-align: left;
+  padding: 0.75em;
+  background: white;
+  flex: 1;
+  cursor: default;
+}
+
+.settings .card .card-item {
+  display: block;
+}
+
+.settings .button-container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.settings .button-container Button {
+  max-width: 20em;
 }

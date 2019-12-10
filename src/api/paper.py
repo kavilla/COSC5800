@@ -8,7 +8,7 @@ api = Api(app=app)
 ns = api.namespace('papers', description='Papers operations')
 
 @ns.route("/")
-class PaperList(Resource):
+class Papers(Resource):
     def get(self):
         """
         Returns a list of paper
@@ -50,7 +50,7 @@ class Paper(Resource):
     200: 'Success',
     404: 'Could not find papers for email'
 })
-class ParticipatorPaperList(Resource):
+class ParticipatorPapers(Resource):
     def get(self, email):
         """
         Displays a papers authored/coauthored by participator

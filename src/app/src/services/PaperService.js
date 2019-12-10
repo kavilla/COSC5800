@@ -55,13 +55,29 @@ const PaperService = {
     return Promise.resolve(selectedPaper);
   },
 
+  setSelectedPaperByPaperId: function (paperId) {
+    return axios
+      .get(paperUrl + paperId)
+      .then(resp => {
+        const data = resp['data'];
+        selectedPaper = new PaperModel(
+          data['paperid'],
+          data['title'],
+          data['filename'],
+          data['contactauthoremail'],
+          data['abstract']
+        );
+        return Promise.resolve(selectedPaper);
+      });
+  },
+
   getReviewsForPaper: function (paper) {
     if (paper === null) {
       return Promise.reject();
     }
 
     return axios
-      .get(paperUrl + paper['paperid'] + '/reviews')
+      .get(paperUrl + paper.paperid + '/reviews')
       .then(resp => {
         const reviews = resp.data.map(x =>
           new ReviewModel(
