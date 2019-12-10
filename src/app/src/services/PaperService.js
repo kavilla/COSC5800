@@ -59,7 +59,7 @@ const PaperService = {
     return axios
       .get(paperUrl + paperId)
       .then(resp => {
-        const data = resp['resp'];
+        const data = resp['data'];
         selectedPaper = new PaperModel(
           data['paperid'],
           data['title'],

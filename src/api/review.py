@@ -37,7 +37,7 @@ class ParticipatorReviews(Resource):
             if result == None:
                 raise NotFoundException
             reviews_schema = ReviewSchema(many=True)
-            return reviews_schema.dump(reviews)
+            return reviews_schema.dump(result)
         except NotFoundException as e:
             ns.abort(404, e.__doc__, status = 'Could not find reviews for email', statusCode = '404')
 

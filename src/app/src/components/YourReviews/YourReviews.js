@@ -44,11 +44,11 @@ export default class YourReviews extends React.Component {
         key={ review.revemail + "_" + review.paperid }>
         <div className="card-top"
           onClick={() => this.handleCardClick(review)}>
-          <h4>{ review.paperid }</h4>
+          <h3>#{ review.paperid }</h3>
         </div>
         <div className="card-middle">
-          <h3>Comment for committee: { review.commentforcommittee }</h3>
-          <h3>Comment for contact author: { review.commentforauthor }</h3>
+          <h5>Comment for committee: { review.commentforcommittee }</h5>
+          <h5>Comment for contact author: { review.commentforauthor }</h5>
         </div>
         <div className="card-bottom">
           <span className="card-bottom-item-large">

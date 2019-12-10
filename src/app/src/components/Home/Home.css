@@ -3,6 +3,7 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  margin: 0.25em 1.25em;
 }
 
 .card {
@@ -36,6 +37,5 @@
 .card-container {
   flex: 1;
   overflow-y:auto;
-  margin: 0.25em 1.25em;
   background: lightgray;
 }
