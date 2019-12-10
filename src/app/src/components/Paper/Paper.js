@@ -15,11 +15,18 @@ export default class Paper extends React.Component {
       toHome: false,
       paper: null,
       reviews: [],
+      isReviewer: false,
       showModal: false
     }
 
     AuthService.getCurrentParticipator()
       .then(currentParticipator => {
+        if (currentParticipator.isReviewer) {
+          this.setState(() => ({
+            isReviewer: true
+          }));
+        }
+
         PaperService.getSelectedPaper()
           .then(paper => {
             if (paper === null) {
@@ -111,31 +118,97 @@ export default class Paper extends React.Component {
       </div>
     ));
 
+    const addReviewButton = !this.state.isLoading && this.state.isReviewer ?
+    <div
+      className="add-review-button-container btn-primary"
+      onClick={() => this.handleShowModal()}>
+      <span>
+        +
+      </span>
+    </div> : null;
+
     const addReviewModal = this.state.showModal ?
       <div className="app-modal-container">
         <div className="app-modal">
-          <Button
-            className="app-modal-close-button btn-light"
-            onClick={() => this.handleHideModal()}>
-              X
-          </Button>
-          <h3 className="modal-header">#{ this.state.paper.paperid }</h3>
-          <h1 className="modal-item">{ this.state.paper.title }</h1>
-          <span className="modal-item">
+          <div className="app-modal-close-button-container">
+            <Button
+              className="app-modal-close-button btn-light"
+              onClick={() => this.handleHideModal()}>
+                X
+            </Button>
+          </div>
+          <h3 className="app-modal-preheader">
+            #{ this.state.paper.paperid }
+          </h3>
+          <h1>{ this.state.paper.title }</h1>
+          <span className="app-modal-subheader">
             Contact: { this.state.paper.contactauthoremail }
           </span>
-          <span className="modal-item">
-            Average Overall Score: TODO
-          </span>
-          <span className="modal-item">
-            Filename: { this.state.paper.filename }
-          </span>
-          <span className="modal-item">
-            Abstract: { this.state.paper.abstract }
-          </span>
+          <div className="app-modal-item">
+            <div className="app-slider">
+              <span>Tech Merit:</span>
+              <input
+                type="range"
+                name="techmerit"
+                min="1"
+                max="10"/>
+            </div>
+          </div>
+          <div className="app-modal-item">
+            <div className="app-slider">
+              <span>Readability:</span>
+              <input
+                type="range"
+                name="readability"
+                min="1"
+                max="10"/>
+            </div>
+          </div>
+          <div className="app-modal-item">
+            <div className="app-slider">
+              <span>Originality:</span>
+              <input
+                type="range"
+                name="originality"
+                min="1"
+                max="10"/>
+            </div>
+          </div>
+          <div className="app-modal-item">
+            <div className="app-slider">
+              <span>Relavance:</span>
+              <input
+                type="range"
+                name="relavance"
+                min="1"
+                max="10"/>
+            </div>
+          </div>
+          <div className="app-modal-item">
+            <div className="app-slider">
+              <span>Overall Score:</span>
+              <input
+                type="range"
+                name="overallrecomm"
+                min="1"
+                max="10"/>
+            </div>
+          </div>
+          <textarea
+            maxlength="120"
+            placeholder="Comment for committee..."
+            className="app-modal-item">
+          </textarea>
+          <textarea
+            maxlength="120"
+            placeholder="Comment for author..."
+            className="app-modal-item">
+          </textarea>
+          <Button>
+            Submit
+          </Button>
         </div>
       </div> : null;
-
 
     return (
       <div className="paper">
@@ -146,12 +219,8 @@ export default class Paper extends React.Component {
         <div className="review-card-container ">
           { reviewCards }
         </div>
-        <div
-          className="add-review-button-container btn-primary"
-          onClick={() => this.handleShowModal()}>
-          <span>
-            +
-          </span>
+        <div>
+          { addReviewButton }
         </div>
         <div>
           { addReviewModal }
