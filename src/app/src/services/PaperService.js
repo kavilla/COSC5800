@@ -3,7 +3,7 @@ import Config from './../config';
 import PaperModel from './../models/Paper';
 import ReviewModel from './../models/Review';
 
-const paperUrl = Config.BASE_URL + 'papers';
+const paperUrl = Config.BASE_URL + 'papers/';
 
 let papers = [];
 let selectedPaper = null;
@@ -26,6 +26,26 @@ const PaperService = {
       });
   },
 
+  getPapersForParticipator: function (participator) {
+    return axios
+      .get(paperUrl + participator.email)
+      .then(resp => {
+        const participatorPapers = resp.data.map(x =>
+          new PaperModel(
+            x['paperid'],
+            x['title'],
+            x['filename'],
+            x['contactauthoremail'],
+            x['abstract']
+          )
+        );
+        return Promise.resolve(participatorPapers);
+      })
+      .catch(err => {
+        return Promise.resolve([]);
+      });
+  },
+
   getSelectedPaper: function () {
     return Promise.resolve(selectedPaper);
   },
@@ -37,11 +57,11 @@ const PaperService = {
 
   getReviewsForPaper: function (paper) {
     if (paper === null) {
-      return Promise.reject();  
+      return Promise.reject();
     }
 
     return axios
-      .get(paperUrl + '/' + paper['paperid'] + '/reviews')
+      .get(paperUrl + paper['paperid'] + '/reviews')
       .then(resp => {
         const reviews = resp.data.map(x =>
           new ReviewModel(

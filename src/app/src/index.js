@@ -8,7 +8,8 @@ import Home from "./components/Home/Home";
 import Login from "./components/Login/Login";
 import SignUp from "./components/SignUp/SignUp";
 import Paper from "./components/Paper/Paper";
-import Settings from "./components/Settings/Settings"
+import Settings from "./components/Settings/Settings";
+import YourPapers from "./components/YourPapers/YourPapers";
 import * as serviceWorker from "./serviceWorker";
 
 const routing = (
@@ -21,7 +22,7 @@ const routing = (
         <Link to="/home" className="router-link">
           Papers
         </Link>
-        <Link to="/home" className="router-link">
+        <Link to="/yourpapers" className="router-link" id="router-menu-yourpapers">
           Your Papers
         </Link>
         <Link to="/home" className="router-link router-link-last">
@@ -37,6 +38,7 @@ const routing = (
         <Route path="/signup" component={SignUp} />
         <Route path="/paper" component={Paper} />
         <Route path="/settings" component={Settings} />
+        <Route path="/yourpapers" component={YourPapers} />
       </div>
     </div>
   </Router>

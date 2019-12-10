@@ -45,6 +45,33 @@ class Paper(Resource):
         Edits a selected paper
         """
 
+@ns.route("/<string:email>")
+@ns.doc(responses={
+    200: 'Success',
+    404: 'Could not find papers for email'
+})
+class ParticipatorPaperList(Resource):
+    def get(self, email):
+        """
+        Displays a papers authored/coauthored by participator
+        """
+        # paperid = db.Column(db.Integer(), primary_key=True)
+        # title = db.Column(db.String(50), nullable=False)
+        # filename = db.Column(db.String(30), nullable=False)
+        # contactauthoremail = db.Column(db.String(30))
+        # abstract = db.Column(db.String(120))
+        try:
+            # Serialize the data for the response
+            papers = db.session.execute('SELECT * FROM paper writes WHERE paperid IN (SELECT paperid FROM writes WHERE email = :email)', {
+                'email': email
+            }).fetchmany()
+            if papers == None:
+                raise NotFoundException
+            papers_schema = PaperSchema(many=True)
+            return papers_schema.dump(papers)
+        except NotFoundException as e:
+            ns.abort(404, e.__doc__, status = 'Could not find papers for email', statusCode = '404')
+
 @ns.route('/<int:paperid>/reviews')
 class PaperReviews(Resource):
     def get(self, paperid):
