@@ -8,7 +8,7 @@ api = Api(app=app)
 ns = api.namespace('reviews', description='Reviews operations')
 
 @ns.route("/")
-class ReviewList(Resource):
+class Reviews(Resource):
     def get(self):
         """
         Returns a list of review
@@ -22,6 +22,24 @@ class ReviewList(Resource):
         """
         Adds a new review to the list
         """
+
+@ns.route('/<string:revemail>')
+class ParticipatorReviews(Resource):
+    def get(self, revemail):
+        """
+        Returns a list of reviews for participator
+        """
+        try:
+            # Serialize the data for the response
+            result = db.session.execute('SELECT * FROM reviews WHERE revemail = :revemail', {
+                'revemail': revemail
+            }).fetchmany()
+            if result == None:
+                raise NotFoundException
+            reviews_schema = ReviewSchema(many=True)
+            return reviews_schema.dump(reviews)
+        except NotFoundException as e:
+            ns.abort(404, e.__doc__, status = 'Could not find reviews for email', statusCode = '404')
 
 @ns.route('/<string:revemail>&<int:paperid>')
 class Review(Resource):

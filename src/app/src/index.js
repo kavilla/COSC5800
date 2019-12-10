@@ -10,6 +10,7 @@ import SignUp from "./components/SignUp/SignUp";
 import Paper from "./components/Paper/Paper";
 import Settings from "./components/Settings/Settings";
 import YourPapers from "./components/YourPapers/YourPapers";
+import YourReviews from "./components/YourReviews/YourReviews";
 import * as serviceWorker from "./serviceWorker";
 
 const routing = (
@@ -25,7 +26,7 @@ const routing = (
         <Link to="/yourpapers" className="router-link" id="router-menu-yourpapers">
           Your Papers
         </Link>
-        <Link to="/home" className="router-link router-link-last">
+        <Link to="/yourreviews" className="router-link router-link-last" id="router-menu-yourreviews">
           Your Reviews
         </Link>
         <Link to="/settings" className="router-link router-link-settings">
@@ -39,6 +40,7 @@ const routing = (
         <Route path="/paper" component={Paper} />
         <Route path="/settings" component={Settings} />
         <Route path="/yourpapers" component={YourPapers} />
+        <Route path="/yourreviews" component={YourReviews} />
       </div>
     </div>
   </Router>

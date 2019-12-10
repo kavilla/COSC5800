@@ -67,7 +67,7 @@ const AuthService = {
       }
 
       if (!currentParticipator.isReviewer) {
-        //  document.getElementById('router-menu-yourreviews').style.display = 'none';
+        document.getElementById('router-menu-yourreviews').style.display = 'none';
       }
     }
     return Promise.resolve(true);
