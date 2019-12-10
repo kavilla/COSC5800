@@ -2,6 +2,7 @@ import React from "react";
 import {Redirect} from "react-router-dom";
 import "./Home.css";
 import PaperService from "./../../services/PaperService";
+import AuthService from "./../../services/AuthService";
 
 export default class Home extends React.Component {
   constructor(props) {
@@ -12,11 +13,14 @@ export default class Home extends React.Component {
       toSpecificPaper: false
     };
 
-    PaperService.getPapers()
-      .then(resp => {
-        this.setState(() => ({
-          papers: resp
-        }));
+    AuthService.getCurrentParticipator()
+      .then(currentParticipator => {
+        PaperService.getPapers()
+          .then(resp => {
+            this.setState(() => ({
+              papers: resp
+            }));
+          });
       });
   }
 
