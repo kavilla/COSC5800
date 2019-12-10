@@ -1,6 +1,9 @@
 import React from "react";
 import "./Paper.css";
+import {Button} from "react-bootstrap";
+import {Redirect} from "react-router-dom";
 import PaperService from "./../../services/PaperService";
+import AuthService from "./../../services/AuthService";
 
 export default class Paper extends React.Component {
   constructor(props) {
@@ -8,25 +11,39 @@ export default class Paper extends React.Component {
 
     this.state = {
       isLoading: true,
+      toHome: false,
       paper: null,
       reviews: []
     }
 
-    PaperService.getSelectedPaper()
-      .then(paper => {
-        PaperService.getReviewsForPaper(paper).then(
-          reviews => {
-            this.setState(() => ({
-              isLoading: false,
-              paper: paper,
-              reviews: reviews
-            }));
-          }
-        );
+    AuthService.getCurrentParticipator()
+      .then(currentParticipator => {
+        PaperService.getSelectedPaper()
+          .then(paper => {
+            if (paper === null) {
+              this.setState(() => ({
+                toHome: true
+              }));
+            }
+
+            PaperService.getReviewsForPaper(paper).then(
+              reviews => {
+                this.setState(() => ({
+                  isLoading: false,
+                  paper: paper,
+                  reviews: reviews
+                }));
+              }
+            );
+          });
       });
   }
 
   render() {
+    if (this.state.toHome) {
+      return <Redirect to="/home" />;
+    }
+
     const paperCard = !this.state.isLoading && this.state.paper !== null ?
       <div className="paper-card">
         <h3 className="paper-card-header">#{ this.state.paper.paperid }</h3>
@@ -87,6 +104,11 @@ export default class Paper extends React.Component {
         </div>
         <div className="review-card-container ">
           { reviewCards }
+        </div>
+        <div className="add-review-button-container btn-primary">
+          <span>
+            +
+          </span>
         </div>
       </div>
     )
