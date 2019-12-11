@@ -71,8 +71,17 @@ export default class Paper extends React.Component {
   };
 
   handleChange = (event) => {
+    const targetName = event.target.name;
+    const targetValue =
+      targetName === 'commentforcommittee' ||
+      targetName === 'commentforauthor'
+        ? event.target.value
+        : Number(event.target.value);
     this.setState({
-      ['review.' + event.target.id]: event.target.value
+      review: {
+        ...this.state.review,
+        [targetName]: targetValue
+      }
     });
   }
 
@@ -198,7 +207,8 @@ export default class Paper extends React.Component {
                 type="range"
                 name="readability"
                 min="1"
-                max="10"/>
+                max="10"
+                onChange={this.handleChange}/>
             </div>
           </div>
           <div className="app-modal-item">
@@ -208,7 +218,8 @@ export default class Paper extends React.Component {
                 type="range"
                 name="originality"
                 min="1"
-                max="10"/>
+                max="10"
+                onChange={this.handleChange}/>
             </div>
           </div>
           <div className="app-modal-item">
@@ -218,7 +229,8 @@ export default class Paper extends React.Component {
                 type="range"
                 name="relavance"
                 min="1"
-                max="10"/>
+                max="10"
+                onChange={this.handleChange}/>
             </div>
           </div>
           <div className="app-modal-item">
@@ -228,18 +240,23 @@ export default class Paper extends React.Component {
                 type="range"
                 name="overallrecomm"
                 min="1"
-                max="10"/>
+                max="10"
+                onChange={this.handleChange}/>
             </div>
           </div>
           <textarea
             maxLength="120"
             placeholder="Comment for committee..."
-            className="app-modal-item">
+            className="app-modal-item"
+            name="commentforcommittee"
+            onChange={this.handleChange}>
           </textarea>
           <textarea
             maxLength="120"
             placeholder="Comment for author..."
-            className="app-modal-item">
+            className="app-modal-item"
+            name="commentforauthor"
+            onChange={this.handleChange}>
           </textarea>
           <Button onClick={() => this.handleSubmit()}>
             Submit

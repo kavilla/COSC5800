@@ -34,7 +34,8 @@ class Reviews(Resource):
     @ns.expect(review_model)
     @ns.doc(responses={
         200: 'Success',
-        401: 'Unauthorized'
+        401: 'Unauthorized',
+        400: 'Invalid Parameters'
     })
     def post(self):
         """
@@ -73,7 +74,7 @@ class Reviews(Resource):
 
             db.session.execute('COMMIT')
 
-            result = db.session.execute('SELECT * FROM paper WHERE paperid = :paperid', {
+            result = db.session.execute('SELECT * FROM reviews WHERE paperid = :paperid', {
                 'paperid': data['paperid']
             }).fetchmany()
             reviews_schema = ReviewSchema(many=True)
