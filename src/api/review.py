@@ -15,8 +15,8 @@ review_model = ns.model('Review', {
     'originality': fields.Integer(required=True, description='Originality', help='Originality is required.'),
     'relavance': fields.Integer(required=True, description='Relavance', help='Relavance is required.'),
     'overallrecomm': fields.Integer(required=True, description='Overall Recommendation', help='Overall recommendation is required.'),
-    'commentforcommittee': fields.String(description='affiliation'),
-    'commentforauthor': fields.String(description='affiliation')
+    'commentforcommittee': fields.String(description='commentforcommittee'),
+    'commentforauthor': fields.String(description='commentforauthor')
 })
 
 @ns.route("/")
