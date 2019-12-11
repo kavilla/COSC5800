@@ -13,6 +13,8 @@ export default class Home extends React.Component {
 
     this.state = {
       papers: [],
+
+      nonFilteredPapers: [],
       toSpecificPaper: false,
       showModal: false,
       paper: {
@@ -26,6 +28,8 @@ export default class Home extends React.Component {
 
     AuthService.getCurrentParticipator()
       .then(currentParticipator => {
+        AuthService.authorizedView();
+        
         this.setState(() => ({
           currentParticipator: currentParticipator
         }));
@@ -33,7 +37,8 @@ export default class Home extends React.Component {
         PaperService.getPapers()
           .then(resp => {
             this.setState(() => ({
-              papers: resp
+              papers: resp,
+              nonFilteredPapers: resp
             }));
           });
       });
@@ -59,6 +64,15 @@ export default class Home extends React.Component {
     });
   };
 
+  handleSearchChange = (event) => {
+    const filteredPapers = this.state.nonFilteredPapers.filter(
+      paper => paper.paperid.toString().indexOf(event.target.value) !== -1
+    );
+    this.setState({
+      papers: filteredPapers
+    });
+  };
+
   handleChange = (event) => {
     this.setState({
       paper: {
@@ -78,6 +92,7 @@ export default class Home extends React.Component {
     )).then(papers => {
         this.setState(() => ({
           papers: papers,
+          nonFilteredPapers: papers,
           showModal: false,
           paper: {
             title: null,
@@ -99,6 +114,16 @@ export default class Home extends React.Component {
     if (this.state.toSpecificPaper) {
       return <Redirect to="/paper" />;
     }
+
+    const searchBar =
+      <div>
+        <input
+          type="text"
+          name="search"
+          placeholder="Search by paper ID..."
+          className="form-control app-search-bar"
+          onChange={this.handleSearchChange}/>
+      </div>
 
     const paperCards = this.state.papers.map((paper) => (
       <div className="card"
@@ -177,6 +202,9 @@ export default class Home extends React.Component {
 
     return (
       <div className="home">
+        <div>
+          { searchBar }
+        </div>
         <div className="card-container">
           { paperCards }
         </div>

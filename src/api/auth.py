@@ -1,7 +1,7 @@
 from flask import Flask, request
 from flask_restplus import Api, Resource, fields
 from config import db
-from models import Participator as P, ParticipatorSchema, NotFoundException
+from models import Participator as P, ParticipatorSchema, NotFoundException, CollisionException
 
 app = Flask(__name__)
 api = Api(app=app)
@@ -89,6 +89,13 @@ class AuthSignUp(Resource):
         try:
             data = request.get_json(force=True)
 
+            participatorResult = db.session.execute('SELECT * FROM participator WHERE email = :email', {
+                'email': data['email'],
+            }).fetchone()
+
+            if participatorResult  != None:
+                raise CollisionException
+
             # Serialize the data for the response
             db.session.execute('INSERT INTO participator VALUES ( :email, :firstname, :minit, :lastname, :phone, :affiliation, :password )', {
                 'email': data['email'],
@@ -112,7 +119,8 @@ class AuthSignUp(Resource):
 
             db.session.execute('COMMIT')
 
-            result = db.session.execute('SELECT * FROM participator WHERE email = :email AND password = :password', {
+            query = 'SELECT * FROM participator WHERE email = :email AND password = :password' if data['password'] != None else 'SELECT * FROM participator WHERE email = :email AND password IS NULL'
+            result = db.session.execute(query, {
                 'email': data['email'],
                 'password': data['password']
             }).fetchone()
@@ -136,5 +144,8 @@ class AuthSignUp(Resource):
                 'isAuthor': authorResult != None,
                 'isReviewer': reviewerResult != None
             }
+        except CollisionException as e:
+            ns.abort(400, e.__doc__, status = 'Email already exists', statusCode = '400')
         except Exception as e:
+            app.logger.error(e)
             ns.abort(400, e.__doc__, status = 'Could not retrieve information', statusCode = '400')

@@ -15,6 +15,7 @@ export default class Settings extends React.Component {
 
     AuthService.getCurrentParticipator()
       .then(currentParticipator => {
+        AuthService.authorizedView();
         this.setState(() => ({
           participator: currentParticipator
         }));

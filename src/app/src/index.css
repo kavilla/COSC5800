@@ -31,6 +31,7 @@ code {
 
 .router .router-link {
   color: black;
+  display: block;
   padding: 0.1em 1em;
   border: 0.05em solid;
   border-bottom: 0;
@@ -39,9 +40,9 @@ code {
   background-color: white;
 }
 
-.router .router-link-last {
+/* .router .router-link-last {
   border-bottom: 0.05em solid;
-}
+} */
 
 .router .router-link:hover {
   text-decoration: none;
@@ -49,7 +50,7 @@ code {
 }
 
 .router .router-link-settings {
-  border: none;
+  /* border: none; */
 }
 
 .router .router-link-settings:hover {
