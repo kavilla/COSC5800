@@ -64,10 +64,14 @@ const AuthService = {
     if (currentParticipator !== null) {
       if (!currentParticipator.isAuthor) {
         document.getElementById('router-menu-yourpapers').style.display = 'none';
+      } else {
+        document.getElementById('router-menu-yourpapers').style.display = 'block';
       }
 
       if (!currentParticipator.isReviewer) {
         document.getElementById('router-menu-yourreviews').style.display = 'none';
+      } else {
+        document.getElementById('router-menu-yourreviews').style.display = 'block';
       }
     }
     return Promise.resolve(true);
@@ -119,7 +123,11 @@ const AuthService = {
         return Promise.resolve(true);
       })
       .catch(err => {
-        return Promise.reject(err);
+        if (err === null && err.data === null) {
+          return Promise.reject(err);
+        }
+
+        return Promise.reject(err.response.data.status);
       });
   }
 }

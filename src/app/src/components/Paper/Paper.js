@@ -32,6 +32,8 @@ export default class Paper extends React.Component {
 
     AuthService.getCurrentParticipator()
       .then(currentParticipator => {
+        AuthService.authorizedView();
+        
         this.setState(() => ({
           currentParticipator: currentParticipator
         }));

@@ -15,6 +15,7 @@ export default class YourPapers extends React.Component {
 
     AuthService.getCurrentParticipator()
       .then(currentParticipator => {
+        AuthService.authorizedView();
         PaperService.getPapersForParticipator(currentParticipator)
           .then(resp => {
             this.setState(() => ({

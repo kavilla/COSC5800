@@ -16,6 +16,7 @@ export default class YourReviews extends React.Component {
 
     AuthService.getCurrentParticipator()
       .then(currentParticipator => {
+        AuthService.authorizedView();
         ReviewService.getReviewsForParticipator(currentParticipator)
           .then(resp => {
             this.setState(() => ({
@@ -23,7 +24,6 @@ export default class YourReviews extends React.Component {
             }));
           })
       });
-
   }
 
   handleCardClick = (review) => {
