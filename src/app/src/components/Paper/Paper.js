@@ -1,6 +1,12 @@
 import React from "react";
 import "./Paper.css";
+import "./../../App.css";
+import {Button} from "react-bootstrap";
+import {Redirect} from "react-router-dom";
 import PaperService from "./../../services/PaperService";
+import AuthService from "./../../services/AuthService";
+import ReviewService from "./../../services/ReviewService";
+import ReviewModel from "./../../models/Review";
 
 export default class Paper extends React.Component {
   constructor(props) {
@@ -8,25 +14,103 @@ export default class Paper extends React.Component {
 
     this.state = {
       isLoading: true,
+      toHome: false,
       paper: null,
-      reviews: []
+      reviews: [],
+      showModal: false,
+      review: {
+        techmerit: 10,
+        readability: 10,
+        originality: 10,
+        relavance: 10,
+        overallrecomm: 10,
+        commentforcommittee: null,
+        commentforauthor: null
+      },
+      currentParticipator: null
     }
 
-    PaperService.getSelectedPaper()
-      .then(paper => {
-        PaperService.getReviewsForPaper(paper).then(
-          reviews => {
-            this.setState(() => ({
-              isLoading: false,
-              paper: paper,
-              reviews: reviews
-            }));
-          }
-        );
+    AuthService.getCurrentParticipator()
+      .then(currentParticipator => {
+        this.setState(() => ({
+          currentParticipator: currentParticipator
+        }));
+
+        PaperService.getSelectedPaper()
+          .then(paper => {
+            if (paper === null) {
+              this.setState(() => ({
+                toHome: true
+              }));
+              return;
+            }
+
+            PaperService.getReviewsForPaper(paper).then(
+              reviews => {
+                this.setState(() => ({
+                  isLoading: false,
+                  paper: paper,
+                  reviews: reviews
+                }));
+              }
+            );
+          });
       });
   }
 
+  handleShowModal = () => {
+    this.setState(() => ({
+      showModal: true
+    }));
+  };
+
+  handleHideModal = () => {
+    this.setState(() => ({
+      showModal: false
+    }));
+  };
+
+  handleChange = (event) => {
+    const targetName = event.target.name;
+    const targetValue =
+      targetName === 'commentforcommittee' ||
+      targetName === 'commentforauthor'
+        ? event.target.value
+        : Number(event.target.value);
+    this.setState({
+      review: {
+        ...this.state.review,
+        [targetName]: targetValue
+      }
+    });
+  }
+
+  handleSubmit = () => {
+    ReviewService.createReview(new ReviewModel(
+      this.state.currentParticipator.email,
+      this.state.paper.paperid,
+      this.state.review.techmerit,
+      this.state.review.readability,
+      this.state.review.originality,
+      this.state.review.relavance,
+      this.state.review.overallrecomm,
+      this.state.review.commentforcommittee,
+      this.state.review.commentforauthor
+    )).then(reviews => {
+        this.setState(() => ({
+          reviews: reviews,
+          showModal: false
+        }));
+    }).catch(err => {
+      alert(err);
+    });
+  };
+
   render() {
+    if (this.state.toHome) {
+      return <Redirect to="/home" />;
+    }
+
     const paperCard = !this.state.isLoading && this.state.paper !== null ?
       <div className="paper-card">
         <h3 className="paper-card-header">#{ this.state.paper.paperid }</h3>
@@ -79,6 +163,107 @@ export default class Paper extends React.Component {
       </div>
     ));
 
+    const addReviewButton = !this.state.isLoading && this.state.currentParticipator !== null && this.state.currentParticipator.isReviewer ?
+    <div
+      className="add-review-button-container btn-primary"
+      onClick={() => this.handleShowModal()}>
+      <span>
+        +
+      </span>
+    </div> : null;
+
+    const addReviewModal = this.state.showModal ?
+      <div className="app-modal-container">
+        <div className="app-modal">
+          <div className="app-modal-close-button-container">
+            <Button
+              className="app-modal-close-button btn-light"
+              onClick={() => this.handleHideModal()}>
+                X
+            </Button>
+          </div>
+          <h3 className="app-modal-preheader">
+            #{ this.state.paper.paperid }
+          </h3>
+          <h1>{ this.state.paper.title }</h1>
+          <span className="app-modal-subheader">
+            Contact: { this.state.paper.contactauthoremail }
+          </span>
+          <div className="app-modal-item">
+            <div className="app-slider">
+              <span>Tech Merit:</span>
+              <input
+                type="range"
+                name="techmerit"
+                min="1"
+                max="10"
+                onChange={this.handleChange}/>
+            </div>
+          </div>
+          <div className="app-modal-item">
+            <div className="app-slider">
+              <span>Readability:</span>
+              <input
+                type="range"
+                name="readability"
+                min="1"
+                max="10"
+                onChange={this.handleChange}/>
+            </div>
+          </div>
+          <div className="app-modal-item">
+            <div className="app-slider">
+              <span>Originality:</span>
+              <input
+                type="range"
+                name="originality"
+                min="1"
+                max="10"
+                onChange={this.handleChange}/>
+            </div>
+          </div>
+          <div className="app-modal-item">
+            <div className="app-slider">
+              <span>Relavance:</span>
+              <input
+                type="range"
+                name="relavance"
+                min="1"
+                max="10"
+                onChange={this.handleChange}/>
+            </div>
+          </div>
+          <div className="app-modal-item">
+            <div className="app-slider">
+              <span>Overall Score:</span>
+              <input
+                type="range"
+                name="overallrecomm"
+                min="1"
+                max="10"
+                onChange={this.handleChange}/>
+            </div>
+          </div>
+          <textarea
+            maxLength="120"
+            placeholder="Comment for committee..."
+            className="app-modal-item"
+            name="commentforcommittee"
+            onChange={this.handleChange}>
+          </textarea>
+          <textarea
+            maxLength="120"
+            placeholder="Comment for author..."
+            className="app-modal-item"
+            name="commentforauthor"
+            onChange={this.handleChange}>
+          </textarea>
+          <Button onClick={() => this.handleSubmit()}>
+            Submit
+          </Button>
+        </div>
+      </div> : null;
+
     return (
       <div className="paper">
         { paperCard }
@@ -87,6 +272,12 @@ export default class Paper extends React.Component {
         </div>
         <div className="review-card-container ">
           { reviewCards }
+        </div>
+        <div>
+          { addReviewButton }
+        </div>
+        <div>
+          { addReviewModal }
         </div>
       </div>
     )

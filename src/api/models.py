@@ -4,6 +4,12 @@ from config import db, ma
 class NotFoundException(Exception):
     pass
 
+class NotAuthorizedException(Exception):
+    pass
+
+class CollisionException(Exception):
+    pass
+
 # Participator
 class Participator(db.Model):
     __tablename__ = 'participator'

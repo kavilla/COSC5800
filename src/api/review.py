@@ -1,11 +1,23 @@
-from flask import Flask
-from flask_restplus import Api, Resource
+from flask import Flask, request
+from flask_restplus import Api, Resource, fields
 from config import db
-from models import Review as R, ReviewSchema, NotFoundException
+from models import Review as R, ReviewSchema, NotFoundException, NotAuthorizedException, CollisionException
 
 app = Flask(__name__)
 api = Api(app=app)
 ns = api.namespace('reviews', description='Reviews operations')
+
+review_model = ns.model('Review', {
+    'revemail': fields.String(required=True, description='Email', help='Email is required.'),
+    'paperid': fields.Integer(required=True, description='PaperId', help='PaperID is required.'),
+    'techmerit': fields.Integer(required=True, description='Tech Merit', help='Tech merit is required.'),
+    'readability': fields.Integer(required=True, description='Readability', help='Readability is required.'),
+    'originality': fields.Integer(required=True, description='Originality', help='Originality is required.'),
+    'relavance': fields.Integer(required=True, description='Relavance', help='Relavance is required.'),
+    'overallrecomm': fields.Integer(required=True, description='Overall Recommendation', help='Overall recommendation is required.'),
+    'commentforcommittee': fields.String(description='affiliation'),
+    'commentforauthor': fields.String(description='affiliation')
+})
 
 @ns.route("/")
 class Reviews(Resource):
@@ -18,10 +30,59 @@ class Reviews(Resource):
         # Serialize the data for the response
         reviews_schema = ReviewSchema(many=True)
         return reviews_schema.dump(reviews)
+
+    @ns.expect(review_model)
+    @ns.doc(responses={
+        200: 'Success',
+        401: 'Unauthorized',
+        400: 'Invalid Parameters'
+    })
     def post(self):
         """
         Adds a new review to the list
         """
+        try:
+            data = request.get_json(force=True)
+
+            reviewerResult = db.session.execute('SELECT * FROM reviewer WHERE email = :email', {
+                'email': data['revemail']
+            }).fetchone()
+
+            if reviewerResult == None:
+                raise UnauthorizedException
+
+            reviewResult = db.session.execute('SELECT * FROM reviews WHERE revemail = :revemail AND paperid = :paperid', {
+                'revemail': data['revemail'],
+                'paperid': data['paperid']
+            }).fetchone()
+
+            if reviewResult  != None:
+                raise CollisionException
+
+            # Serialize the data for the response
+            db.session.execute('INSERT INTO reviews VALUES (:revemail, :paperid, :techmerit, :readability, :originality, :relavance, :overallrecomm, :commentforcommittee, :commentforauthor)', {
+                'revemail': data['revemail'],
+                'paperid': data['paperid'],
+                'techmerit': data['techmerit'],
+                'readability': data['readability'],
+                'originality': data['originality'],
+                'relavance': data['relavance'],
+                'overallrecomm': data['overallrecomm'],
+                'commentforcommittee': data['commentforcommittee'],
+                'commentforauthor': data['commentforauthor']
+            })
+
+            db.session.execute('COMMIT')
+
+            result = db.session.execute('SELECT * FROM reviews WHERE paperid = :paperid', {
+                'paperid': data['paperid']
+            }).fetchmany()
+            reviews_schema = ReviewSchema(many=True)
+            return reviews_schema.dump(result)
+        except CollisionException as e:
+            ns.abort(400, e.__doc__, status = 'Review for paper already exists for email', statusCode = '400')
+        except NotAuthorizedException as e:
+            ns.abort(401, e.__doc__, status = 'Not allowed to POST review', statusCode = '401')
 
 @ns.route('/<string:revemail>')
 class ParticipatorReviews(Resource):
