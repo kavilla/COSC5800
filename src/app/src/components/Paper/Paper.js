@@ -164,13 +164,13 @@ export default class Paper extends React.Component {
     ));
 
     const addReviewButton = !this.state.isLoading && this.state.currentParticipator !== null && this.state.currentParticipator.isReviewer ?
-    <div
-      className="add-review-button-container btn-primary"
-      onClick={() => this.handleShowModal()}>
-      <span>
-        +
-      </span>
-    </div> : null;
+      <div
+        className="add-button-container btn-primary"
+        onClick={() => this.handleShowModal()}>
+        <span>
+          +
+        </span>
+      </div> : null;
 
     const addReviewModal = this.state.showModal ?
       <div className="app-modal-container">
@@ -247,14 +247,14 @@ export default class Paper extends React.Component {
           <textarea
             maxLength="120"
             placeholder="Comment for committee..."
-            className="app-modal-item"
+            className="app-modal-item form-control"
             name="commentforcommittee"
             onChange={this.handleChange}>
           </textarea>
           <textarea
             maxLength="120"
             placeholder="Comment for author..."
-            className="app-modal-item"
+            className="app-modal-item form-control"
             name="commentforauthor"
             onChange={this.handleChange}>
           </textarea>
