@@ -99,7 +99,16 @@ export default class Paper extends React.Component {
     )).then(reviews => {
         this.setState(() => ({
           reviews: reviews,
-          showModal: false
+          showModal: false,
+          review: {
+            techmerit: 10,
+            readability: 10,
+            originality: 10,
+            relavance: 10,
+            overallrecomm: 10,
+            commentforcommittee: null,
+            commentforauthor: null
+          }
         }));
     }).catch(err => {
       alert(err);

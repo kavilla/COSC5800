@@ -78,12 +78,22 @@ export default class Home extends React.Component {
     )).then(papers => {
         this.setState(() => ({
           papers: papers,
-          showModal: false
+          showModal: false,
+          paper: {
+            title: null,
+            filename: null,
+            contactauthoremail: null,
+            abstract: null
+          }
         }));
     }).catch(err => {
       alert(err);
     });
   };
+
+  validateForm() {
+    return this.state.paper.title !== null && this.state.paper.filename !== null;
+  }
 
   render() {
     if (this.state.toSpecificPaper) {
@@ -157,8 +167,10 @@ export default class Home extends React.Component {
               className="form-control"
               onChange={this.handleChange}>
             </textarea>
-            <Button onClick={() => this.handleSubmit()}>
-              Submit
+            <Button
+              disabled={!this.validateForm()}
+              onClick={() => this.handleSubmit()}>
+                Submit
             </Button>
           </div>
         </div> : null;
