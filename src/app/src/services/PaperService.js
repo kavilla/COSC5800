@@ -94,7 +94,31 @@ const PaperService = {
         );
         return Promise.resolve(reviews);
       });
-  }
+  },
+
+  createPaper: function (paper) {
+    return axios
+      .post(paperUrl, paper)
+      .then(resp => {
+        papers = resp.data.map(x =>
+          new PaperModel(
+            x['paperid'],
+            x['title'],
+            x['filename'],
+            x['contactauthoremail'],
+            x['abstract']
+          )
+        );
+        return Promise.resolve(papers);
+      })
+      .catch(err => {
+        if (err === null && err.data === null) {
+          return Promise.reject(err);
+        }
+
+        return Promise.reject(err.response.data.status);
+      });;
+  },
 }
 
 export default PaperService;

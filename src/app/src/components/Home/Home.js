@@ -5,6 +5,7 @@ import "./Home.css";
 import "./../../App.css";
 import PaperService from "./../../services/PaperService";
 import AuthService from "./../../services/AuthService";
+import PaperModel from "./../../models/Paper";
 
 export default class Home extends React.Component {
   constructor(props) {
@@ -14,6 +15,12 @@ export default class Home extends React.Component {
       papers: [],
       toSpecificPaper: false,
       showModal: false,
+      paper: {
+        title: null,
+        filename: null,
+        contactauthoremail: null,
+        abstract: null
+      },
       currentParticipator: null
     };
 
@@ -53,17 +60,28 @@ export default class Home extends React.Component {
   };
 
   handleChange = (event) => {
-    const targetName = event.target.name;
-    const targetValue =
-      targetName === 'commentforcommittee' ||
-      targetName === 'commentforauthor'
-        ? event.target.value
-        : Number(event.target.value);
     this.setState({
-      review: {
-        ...this.state.review,
-        [targetName]: targetValue
+      paper: {
+        ...this.state.paper,
+        [event.target.name]: event.target.value
       }
+    });
+  };
+
+  handleSubmit = () => {
+    PaperService.createPaper(new PaperModel(
+      null,
+      this.state.paper.title,
+      this.state.paper.filename,
+      this.state.currentParticipator.email,
+      this.state.paper.abstract
+    )).then(papers => {
+        this.setState(() => ({
+          papers: papers,
+          showModal: false
+        }));
+    }).catch(err => {
+      alert(err);
     });
   };
 
@@ -135,7 +153,7 @@ export default class Home extends React.Component {
               maxLength="120"
               placeholder="Abstract..."
               className="app-modal-item"
-              name="commentforcommittee"
+              name="abstract"
               className="form-control"
               onChange={this.handleChange}>
             </textarea>
