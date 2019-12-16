@@ -7,15 +7,27 @@ Front end was built in ReactJS, which was bootstrapped with
 
 The conference review is given in previous assignments.
 
+Demo video:
+
+[![Demo Video](https://i.ytimg.com/vi/V6kkCs0MNLQ/hqdefault.jpg)](https://youtu.be/V6kkCs0MNLQ)
+
+Setup video:
+
+[![Setup Video](https://i.ytimg.com/vi/YoyEKSLo16s/hqdefault.jpg)](https://www.youtube.com/watch?v=YoyEKSLo16s)
+
+
 ### Getting started
 
 * Clone this repo
 * Open your desired shell
 * [Install Oracle Client](https://oracle.github.io/odpi/doc/installation.html#windows)
+  * Or cd src/api and unzip the instantclient_19_3 to current the direction
+* Add the location of instantclient_19_3 to your environment system variables with the trailing slash for the Path variable
+  * For me: C:\{path_to_project}\COSC5800\src\api\instantclient_19_3\
 
 `How to run the API:`
 
-* cd src/api
+* If you haven't already cd src/api
 * [Install python, create and run a virtual environment](https://www.twilio.com/docs/usage/tutorials/how-to-set-up-your-python-and-flask-development-environment) - follow until you get to the part to twilio.
   * Here's my virtual environment name:
     ```
@@ -26,6 +38,7 @@ The conference review is given in previous assignments.
   ```
   pip install -r requirements.txt
   ```
+  * If you run into an error saying cx-Oracle could not be installed you need to install from [here](https://visualstudio.microsoft.com/thank-you-for-downloading-visual-studio-for-cplusplus/?sku=Community&rel=16&rid=30005)
 * Run the API by running:
   ```
   python app.py
@@ -35,6 +48,14 @@ The conference review is given in previous assignments.
 `How to run the UI:`
 
 * cd src/app
+* Install the dependencies
+  ```
+  npm install
+  ```
+* Fix in npm issues if it says to
+  ```
+  npm audit fix
+  ```
 * Run the app in development mode
   ```
   npm start
