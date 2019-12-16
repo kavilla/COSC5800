@@ -1,7 +1,8 @@
 from flask import Flask, request
 from flask_restplus import Api, Resource, fields
+
 from config import db
-from models import Participator as P, ParticipatorSchema, NotFoundException, CollisionException
+from models import NotFoundException, CollisionException
 
 app = Flask(__name__)
 api = Api(app=app)
@@ -24,23 +25,28 @@ signup_model = ns.model('Auth SignUp', {
     'isReviewer': fields.Boolean(required=True, description='Is Reviewer', help='Is Reviewer is required.')
 })
 
+
 @ns.route("/login")
 class AuthLogin(Resource):
     @ns.expect(login_model)
     @ns.doc(responses={
         200: 'Success',
         400: 'Invalid Request',
-        404: 'Participator not found',
-        400: 'Invalid Request'
+        404: 'Participator not found'
     })
     def post(self):
         """
         Returns a participator if valid
         """
         try:
+            password_exists_query = 'SELECT * FROM participator WHERE email = :email AND password = :password'
+            password_is_null_query = 'SELECT * FROM participator WHERE email = :email AND password IS NULL'
+            author_query = 'SELECT * FROM author WHERE email = :email'
+            reviewer_query = 'SELECT * FROM reviewer WHERE email = :email'
+
             data = request.get_json(force=True)
 
-            query = 'SELECT * FROM participator WHERE email = :email AND password = :password' if data['password'] != None else 'SELECT * FROM participator WHERE email = :email AND password IS NULL'
+            query = password_exists_query if data['password'] != None else password_is_null_query
             result = db.session.execute(query, {
                 'email': data['email'],
                 'password': data['password']
@@ -49,11 +55,11 @@ class AuthLogin(Resource):
             if result == None:
                 raise NotFoundException
 
-            authorResult = db.session.execute('SELECT * FROM author WHERE email = :email', {
+            author_result = db.session.execute(author_query, {
                 'email': data['email']
             }).fetchone()
 
-            reviewerResult = db.session.execute('SELECT * FROM reviewer WHERE email = :email', {
+            reviewer_result = db.session.execute(reviewer_query, {
                 'email': data['email']
             }).fetchone()
 
@@ -65,15 +71,16 @@ class AuthLogin(Resource):
                 'phone': result['phone'],
                 'affiliation': result['affiliation'],
                 'password': result['password'],
-                'isAuthor': authorResult != None,
-                'isReviewer': reviewerResult != None
+                'isAuthor': author_result != None,
+                'isReviewer': reviewer_result != None
             }
         except NotFoundException as e:
             app.logger.error(e)
-            ns.abort(404, e.__doc__, status = 'Could not find participator with email and password', statusCode = '404')
+            ns.abort(404, e.__doc__, status='Could not find participator with email and password', statusCode='404')
         except Exception as e:
             app.logger.error(e)
-            ns.abort(400, e.__doc__, status = 'Could not retrieve information', statusCode = '400')
+            ns.abort(400, e.__doc__, status='Could not retrieve information', statusCode='400')
+
 
 @ns.route("/signup")
 class AuthSignUp(Resource):
@@ -87,17 +94,26 @@ class AuthSignUp(Resource):
         Create and returns a participator if valid
         """
         try:
+            participator_query = 'SELECT * FROM participator WHERE email = :email'
+            insert_participator_query = 'INSERT INTO participator VALUES ( :email, :firstname, :minit, :lastname, :phone, :affiliation, :password )'
+            insert_author_query = 'INSERT INTO author VALUES ( :email )'
+            insert_reviewer_query = 'INSERT INTO reviewer VALUES ( :email )'
+            commit_query = 'COMMIT'
+            password_exists_query = 'SELECT * FROM participator WHERE email = :email AND password = :password'
+            password_is_null_query = 'SELECT * FROM participator WHERE email = :email AND password IS NULL'
+            author_query = 'SELECT * FROM author WHERE email = :email'
+            reviewer_query = 'SELECT * FROM reviewer WHERE email = :email'
+
             data = request.get_json(force=True)
 
-            participatorResult = db.session.execute('SELECT * FROM participator WHERE email = :email', {
+            participator_result = db.session.execute(participator_query, {
                 'email': data['email'],
             }).fetchone()
 
-            if participatorResult  != None:
+            if participator_result != None:
                 raise CollisionException
 
-            # Serialize the data for the response
-            db.session.execute('INSERT INTO participator VALUES ( :email, :firstname, :minit, :lastname, :phone, :affiliation, :password )', {
+            db.session.execute(insert_participator_query, {
                 'email': data['email'],
                 'firstname': data['firstname'],
                 'minit': data['minit'],
@@ -108,28 +124,28 @@ class AuthSignUp(Resource):
             })
 
             if data['isAuthor'] != None and data['isAuthor']:
-                db.session.execute('INSERT INTO author VALUES ( :email )', {
+                db.session.execute(insert_author_query, {
                     'email': data['email']
                 })
 
             if data['isReviewer'] != None and data['isReviewer']:
-                db.session.execute('INSERT INTO reviewer VALUES ( :email )', {
+                db.session.execute(insert_reviewer_query, {
                     'email': data['email']
                 })
 
-            db.session.execute('COMMIT')
+            db.session.execute(commit_query)
 
-            query = 'SELECT * FROM participator WHERE email = :email AND password = :password' if data['password'] != None else 'SELECT * FROM participator WHERE email = :email AND password IS NULL'
+            query = password_exists_query if data['password'] != None else password_is_null_query
             result = db.session.execute(query, {
                 'email': data['email'],
                 'password': data['password']
             }).fetchone()
 
-            authorResult = db.session.execute('SELECT * FROM author WHERE email = :email', {
+            author_result = db.session.execute(author_query, {
                 'email': data['email']
             }).fetchone()
 
-            reviewerResult = db.session.execute('SELECT * FROM reviewer WHERE email = :email', {
+            reviewer_result = db.session.execute(reviewer_query, {
                 'email': data['email']
             }).fetchone()
 
@@ -141,11 +157,11 @@ class AuthSignUp(Resource):
                 'phone': result['phone'],
                 'affiliation': result['affiliation'],
                 'password': result['password'],
-                'isAuthor': authorResult != None,
-                'isReviewer': reviewerResult != None
+                'isAuthor': author_result != None,
+                'isReviewer': reviewer_result != None
             }
         except CollisionException as e:
-            ns.abort(400, e.__doc__, status = 'Email already exists', statusCode = '400')
+            ns.abort(400, e.__doc__, status='Email already exists', statusCode='400')
         except Exception as e:
             app.logger.error(e)
-            ns.abort(400, e.__doc__, status = 'Could not retrieve information', statusCode = '400')
+            ns.abort(400, e.__doc__, status='Could not retrieve information', statusCode='400')
