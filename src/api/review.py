@@ -1,5 +1,6 @@
 from flask import Flask, request
 from flask_restplus import Api, Resource, fields
+
 from config import db
 from models import Review as R, ReviewSchema, NotFoundException, NotAuthorizedException, CollisionException
 
@@ -14,10 +15,12 @@ review_model = ns.model('Review', {
     'readability': fields.Integer(required=True, description='Readability', help='Readability is required.'),
     'originality': fields.Integer(required=True, description='Originality', help='Originality is required.'),
     'relavance': fields.Integer(required=True, description='Relavance', help='Relavance is required.'),
-    'overallrecomm': fields.Integer(required=True, description='Overall Recommendation', help='Overall recommendation is required.'),
+    'overallrecomm': fields.Integer(required=True, description='Overall Recommendation',
+                                    help='Overall recommendation is required.'),
     'commentforcommittee': fields.String(description='commentforcommittee'),
     'commentforauthor': fields.String(description='commentforauthor')
 })
+
 
 @ns.route("/")
 class Reviews(Resource):
@@ -49,28 +52,31 @@ class Reviews(Resource):
             }).fetchone()
 
             if reviewerResult == None:
-                raise UnauthorizedException
+                raise NotAuthorizedException
 
-            reviewResult = db.session.execute('SELECT * FROM reviews WHERE revemail = :revemail AND paperid = :paperid', {
-                'revemail': data['revemail'],
-                'paperid': data['paperid']
-            }).fetchone()
+            reviewResult = db.session.execute('SELECT * FROM reviews WHERE revemail = :revemail AND paperid = :paperid',
+                                              {
+                                                  'revemail': data['revemail'],
+                                                  'paperid': data['paperid']
+                                              }).fetchone()
 
-            if reviewResult  != None:
+            if reviewResult != None:
                 raise CollisionException
 
             # Serialize the data for the response
-            db.session.execute('INSERT INTO reviews VALUES (:revemail, :paperid, :techmerit, :readability, :originality, :relavance, :overallrecomm, :commentforcommittee, :commentforauthor)', {
-                'revemail': data['revemail'],
-                'paperid': data['paperid'],
-                'techmerit': data['techmerit'],
-                'readability': data['readability'],
-                'originality': data['originality'],
-                'relavance': data['relavance'],
-                'overallrecomm': data['overallrecomm'],
-                'commentforcommittee': data['commentforcommittee'],
-                'commentforauthor': data['commentforauthor']
-            })
+            db.session.execute(
+                'INSERT INTO reviews VALUES (:revemail, :paperid, :techmerit, :readability, :originality, :relavance, :overallrecomm, :commentforcommittee, :commentforauthor)',
+                {
+                    'revemail': data['revemail'],
+                    'paperid': data['paperid'],
+                    'techmerit': data['techmerit'],
+                    'readability': data['readability'],
+                    'originality': data['originality'],
+                    'relavance': data['relavance'],
+                    'overallrecomm': data['overallrecomm'],
+                    'commentforcommittee': data['commentforcommittee'],
+                    'commentforauthor': data['commentforauthor']
+                })
 
             db.session.execute('COMMIT')
 
@@ -80,9 +86,10 @@ class Reviews(Resource):
             reviews_schema = ReviewSchema(many=True)
             return reviews_schema.dump(result)
         except CollisionException as e:
-            ns.abort(400, e.__doc__, status = 'Review for paper already exists for email', statusCode = '400')
+            ns.abort(400, e.__doc__, status='Review for paper already exists for email', statusCode='400')
         except NotAuthorizedException as e:
-            ns.abort(401, e.__doc__, status = 'Not allowed to POST review', statusCode = '401')
+            ns.abort(401, e.__doc__, status='Not allowed to POST review', statusCode='401')
+
 
 @ns.route('/<string:revemail>')
 class ParticipatorReviews(Resource):
@@ -100,7 +107,8 @@ class ParticipatorReviews(Resource):
             reviews_schema = ReviewSchema(many=True)
             return reviews_schema.dump(result)
         except NotFoundException as e:
-            ns.abort(404, e.__doc__, status = 'Could not find reviews for email', statusCode = '404')
+            ns.abort(404, e.__doc__, status='Could not find reviews for email', statusCode='404')
+
 
 @ns.route('/<string:revemail>&<int:paperid>')
 class Review(Resource):
@@ -119,7 +127,8 @@ class Review(Resource):
             review_schema = ReviewSchema()
             return review_schema.dump(result)
         except NotFoundException as e:
-            ns.abort(404, e.__doc__, status = 'Could not find review with email and paperid', statusCode = '404')
+            ns.abort(404, e.__doc__, status='Could not find review with email and paperid', statusCode='404')
+
     def put(self, revemail, paperid):
         """
         Edits a selected review

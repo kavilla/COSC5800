@@ -1,5 +1,5 @@
 from config import db, ma
-from flask_restplus import fields
+
 
 # Custom Exception
 class NotFoundException(Exception):

@@ -1,5 +1,6 @@
 from flask import Flask, request
 from flask_restplus import Api, Resource, fields
+
 from config import db
 from models import Paper as P, PaperSchema, ReviewSchema, NotFoundException, NotAuthorizedException
 
@@ -13,6 +14,7 @@ paper_model = ns.model('Paper', {
     'contactauthoremail': fields.String(required=True, description='Email', help='Email is required.'),
     'abstract': fields.String(description='abstract')
 })
+
 
 @ns.route("/")
 class Papers(Resource):
@@ -44,15 +46,17 @@ class Papers(Resource):
             }).fetchone()
 
             if authorResult == None:
-                raise UnauthorizedException
+                raise NotAuthorizedException
 
             # Serialize the data for the response
-            db.session.execute('INSERT INTO paper VALUES (Paper_paperid_Seq.nextval, :title, :filename, :contactauthoremail, :abstract)', {
-                'title': data['title'],
-                'filename': data['filename'],
-                'contactauthoremail': data['contactauthoremail'],
-                'abstract': data['abstract']
-            })
+            db.session.execute(
+                'INSERT INTO paper VALUES (Paper_paperid_Seq.nextval, :title, :filename, :contactauthoremail, :abstract)',
+                {
+                    'title': data['title'],
+                    'filename': data['filename'],
+                    'contactauthoremail': data['contactauthoremail'],
+                    'abstract': data['abstract']
+                })
 
             db.session.execute('COMMIT')
 
@@ -60,7 +64,8 @@ class Papers(Resource):
             papers_schema = PaperSchema(many=True)
             return papers_schema.dump(result)
         except NotAuthorizedException as e:
-            ns.abort(401, e.__doc__, status = 'Not allowed to POST review', statusCode = '401')
+            ns.abort(401, e.__doc__, status='Not allowed to POST review', statusCode='401')
+
 
 @ns.route('/<int:paperid>')
 class Paper(Resource):
@@ -78,11 +83,13 @@ class Paper(Resource):
             paper_schema = PaperSchema()
             return paper_schema.dump(result)
         except NotFoundException as e:
-            ns.abort(404, e.__doc__, status = 'Could not find paper with paperid', statusCode = '404')
+            ns.abort(404, e.__doc__, status='Could not find paper with paperid', statusCode='404')
+
     def put(self, paperid):
         """
         Edits a selected paper
         """
+
 
 @ns.route("/<string:email>")
 @ns.doc(responses={
@@ -101,15 +108,17 @@ class ParticipatorPapers(Resource):
         # abstract = db.Column(db.String(120))
         try:
             # Serialize the data for the response
-            papers = db.session.execute('SELECT * FROM paper writes WHERE paperid IN (SELECT paperid FROM writes WHERE email = :email)', {
-                'email': email
-            }).fetchmany()
+            papers = db.session.execute(
+                'SELECT * FROM paper writes WHERE paperid IN (SELECT paperid FROM writes WHERE email = :email)', {
+                    'email': email
+                }).fetchmany()
             if papers == None:
                 raise NotFoundException
             papers_schema = PaperSchema(many=True)
             return papers_schema.dump(papers)
         except NotFoundException as e:
-            ns.abort(404, e.__doc__, status = 'Could not find papers for email', statusCode = '404')
+            ns.abort(404, e.__doc__, status='Could not find papers for email', statusCode='404')
+
 
 @ns.route('/<int:paperid>/reviews')
 class PaperReviews(Resource):
@@ -127,4 +136,4 @@ class PaperReviews(Resource):
             reviews_schema = ReviewSchema(many=True)
             return reviews_schema.dump(reviews)
         except NotFoundException as e:
-            ns.abort(404, e.__doc__, status = 'Could not find paper with paperid', statusCode = '404')
+            ns.abort(404, e.__doc__, status='Could not find paper with paperid', statusCode='404')
