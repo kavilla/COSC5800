@@ -67,7 +67,7 @@ class Papers(Resource):
 
             return self.get()
         except NotAuthorizedException as e:
-            ns.abort(401, e.__doc__, status='Not allowed to create review', statusCode='401')
+            ns.abort(401, e.__doc__, status='Not allowed to create paper', statusCode='401')
         except Exception as e:
             app.logger.error(e)
             ns.abort(400, e.__doc__, status='Could not retrieve information', statusCode='400')
@@ -103,7 +103,7 @@ class Paper(Resource):
 class ParticipatorPapers(Resource):
     @ns.doc(responses={
         200: 'Success',
-        404: 'Could not find papers for email'
+        404: 'Not Found'
     })
     def get(self, email):
         """
@@ -129,7 +129,7 @@ class ParticipatorPapers(Resource):
 class PaperReviews(Resource):
     @ns.doc(responses={
         200: 'Success',
-        404: 'Could not find reviews for paper'
+        404: 'Not Found'
     })
     def get(self, paperid):
         """
@@ -148,4 +148,4 @@ class PaperReviews(Resource):
             reviews_schema = ReviewSchema(many=True)
             return reviews_schema.dump(result)
         except NotFoundException as e:
-            ns.abort(404, e.__doc__, status='Could not find paper with paperid', statusCode='404')
+            ns.abort(404, e.__doc__, status='Could not find reviews with paper', statusCode='404')

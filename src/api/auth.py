@@ -32,7 +32,7 @@ class AuthLogin(Resource):
     @ns.doc(responses={
         200: 'Success',
         400: 'Invalid Request',
-        404: 'Participator not found'
+        404: 'Not found'
     })
     def post(self):
         """
