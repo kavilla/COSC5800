@@ -16,7 +16,7 @@
 
 .signup .signup-container .signup-item {
   flex: 1;
-  padding:1.25em;
+  padding: 1.25em;
   max-width: 30em;
   margin: auto;
 }
@@ -50,7 +50,7 @@
   padding-right: 1em;
 }
 
-.signup .signup-container .signup-item  .signup-item-sublabel {
+.signup .signup-container .signup-item .signup-item-sublabel {
   color: lightgray;
 }
 

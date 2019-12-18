@@ -7,11 +7,10 @@ const reviewUrl = Config.BASE_URL + 'reviews/';
 let reviews = [];
 
 const ReviewService = {
-  getReviews: function () {
-    return axios
-      .get(reviewUrl)
-      .then(resp => {
-        reviews = resp.data.map(x =>
+  getReviews: function() {
+    return axios.get(reviewUrl).then(resp => {
+      reviews = resp.data.map(
+        x =>
           new ReviewModel(
             x['revemail'],
             x['paperid'],
@@ -21,29 +20,30 @@ const ReviewService = {
             x['relavance'],
             x['overallrecomm'],
             x['commentforcommittee'],
-            x['commentforauthor']
-          )
-        );
-        return Promise.resolve(reviews);
-      });
+            x['commentforauthor'],
+          ),
+      );
+      return Promise.resolve(reviews);
+    });
   },
 
-  getReviewsForParticipator: function (participator) {
+  getReviewsForParticipator: function(participator) {
     return axios
       .get(reviewUrl + participator.email)
       .then(resp => {
-        const participatorReviews = resp.data.map(x =>
-          new ReviewModel(
-            x['revemail'],
-            x['paperid'],
-            x['techmerit'],
-            x['readability'],
-            x['originality'],
-            x['relavance'],
-            x['overallrecomm'],
-            x['commentforcommittee'],
-            x['commentforauthor']
-          )
+        const participatorReviews = resp.data.map(
+          x =>
+            new ReviewModel(
+              x['revemail'],
+              x['paperid'],
+              x['techmerit'],
+              x['readability'],
+              x['originality'],
+              x['relavance'],
+              x['overallrecomm'],
+              x['commentforcommittee'],
+              x['commentforauthor'],
+            ),
         );
         return Promise.resolve(participatorReviews);
       })
@@ -52,22 +52,23 @@ const ReviewService = {
       });
   },
 
-  createReview: function (review) {
+  createReview: function(review) {
     return axios
       .post(reviewUrl, review)
       .then(resp => {
-        const participatorReviews = resp.data.map(x =>
-          new ReviewModel(
-            x['revemail'],
-            x['paperid'],
-            x['techmerit'],
-            x['readability'],
-            x['originality'],
-            x['relavance'],
-            x['overallrecomm'],
-            x['commentforcommittee'],
-            x['commentforauthor']
-          )
+        const participatorReviews = resp.data.map(
+          x =>
+            new ReviewModel(
+              x['revemail'],
+              x['paperid'],
+              x['techmerit'],
+              x['readability'],
+              x['originality'],
+              x['relavance'],
+              x['overallrecomm'],
+              x['commentforcommittee'],
+              x['commentforauthor'],
+            ),
         );
         return Promise.resolve(participatorReviews);
       })
@@ -78,7 +79,7 @@ const ReviewService = {
 
         return Promise.reject(err.response.data.status);
       });
-  }
-}
+  },
+};
 
 export default ReviewService;

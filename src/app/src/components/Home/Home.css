@@ -15,7 +15,7 @@
 }
 
 .card:hover {
-  background: rgb(250,250,250);
+  background: rgb(250, 250, 250);
 }
 
 .card .card-top {
@@ -36,6 +36,6 @@
 
 .card-container {
   flex: 1;
-  overflow-y:auto;
+  overflow-y: auto;
   background: lightgray;
 }

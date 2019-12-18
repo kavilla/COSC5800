@@ -1,8 +1,8 @@
-import React from "react";
-import {Button, FormGroup, FormControl, FormLabel} from "react-bootstrap";
-import {Redirect, Link} from "react-router-dom";
-import "./SignUp.css";
-import AuthService from "./../../services/AuthService";
+import React from 'react';
+import { Button, FormGroup, FormControl, FormLabel } from 'react-bootstrap';
+import { Redirect, Link } from 'react-router-dom';
+import './SignUp.css';
+import AuthService from './../../services/AuthService';
 import ParticipatorModel from './../../models/Participator';
 
 export default class SignUp extends React.Component {
@@ -10,24 +10,24 @@ export default class SignUp extends React.Component {
     super(props);
 
     this.state = {
-      email: "",
+      email: '',
       password: null,
       confirmPassword: null,
-      firstname: "",
+      firstname: '',
       minit: null,
-      lastname: "",
+      lastname: '',
       phone: null,
       affiliation: null,
       isAuthor: false,
       isReviewer: false,
-      toHome: false
+      toHome: false,
     };
   }
 
   validateForm() {
     let isFormValid = true;
 
-    isFormValid = isFormValid && this.state.email.length > 0 ;
+    isFormValid = isFormValid && this.state.email.length > 0;
     isFormValid = isFormValid && this.state.firstname.length > 0;
     if (this.state.minit !== null) {
       isFormValid = isFormValid && this.state.minit.length <= 1;
@@ -42,39 +42,42 @@ export default class SignUp extends React.Component {
     const targetId = event.target.id;
     if (targetId === 'isAuthor' || targetId === 'isReviewer') {
       this.setState({
-        [targetId]: event.target.checked
+        [targetId]: event.target.checked,
       });
       return;
     }
 
     this.setState({
-      [targetId]: event.target.value
+      [targetId]: event.target.value,
     });
   };
 
   handleSubmit = event => {
     event.preventDefault();
 
-    AuthService.signup(new ParticipatorModel(
-      this.state.email,
-      this.state.password,
-      this.state.firstname,
-      this.state.minit,
-      this.state.lastname,
-      this.state.phone,
-      this.state.affiliation,
-      this.state.isAuthor,
-      this.state.isReviewer
-    )).then(resp => {
-      if (resp) {
-        this.setState(() => ({
-          toHome: true
-        }));
-      }
-    })
-    .catch(err => {
-      alert(err);
-    });
+    AuthService.signup(
+      new ParticipatorModel(
+        this.state.email,
+        this.state.password,
+        this.state.firstname,
+        this.state.minit,
+        this.state.lastname,
+        this.state.phone,
+        this.state.affiliation,
+        this.state.isAuthor,
+        this.state.isReviewer,
+      ),
+    )
+      .then(resp => {
+        if (resp) {
+          this.setState(() => ({
+            toHome: true,
+          }));
+        }
+      })
+      .catch(err => {
+        alert(err);
+      });
   };
 
   componentDidMount() {
@@ -97,10 +100,7 @@ export default class SignUp extends React.Component {
           <div className="signup-item">
             <form onSubmit={this.handleSubmit}>
               <div className="signup-item-name">
-                <FormGroup
-                  autoFocus
-                  className="signup-item-name-item-large"
-                  controlId="firstname">
+                <FormGroup autoFocus className="signup-item-name-item-large" controlId="firstname">
                   <FormLabel>First Name</FormLabel>
                   <FormControl
                     type="text"
@@ -109,9 +109,7 @@ export default class SignUp extends React.Component {
                     placeholder="Required"
                   />
                 </FormGroup>
-                <FormGroup
-                  className="signup-item-name-item-small"
-                  controlId="minit">
+                <FormGroup className="signup-item-name-item-small" controlId="minit">
                   <FormLabel>MI</FormLabel>
                   <FormControl
                     value={this.state.minit}
@@ -120,9 +118,7 @@ export default class SignUp extends React.Component {
                     placeholder="Optional"
                   />
                 </FormGroup>
-                <FormGroup
-                  className="signup-item-name-item-large"
-                  controlId="lastname">
+                <FormGroup className="signup-item-name-item-large" controlId="lastname">
                   <FormLabel>Last Name</FormLabel>
                   <FormControl
                     value={this.state.lastname}
@@ -150,37 +146,25 @@ export default class SignUp extends React.Component {
                   placeholder="Optional"
                 />
               </FormGroup>
-              <h3>
-                Role(s)
-              </h3>
-              <span className="signup-item-sublabel">
-                Select one or many
-              </span>
-              <FormGroup
-                controlId="isAuthor"
-                className="signup-checkbox-container">
+              <h3>Role(s)</h3>
+              <span className="signup-item-sublabel">Select one or many</span>
+              <FormGroup controlId="isAuthor" className="signup-checkbox-container">
                 <FormControl
                   value={this.state.isAuthor}
                   onChange={this.handleChange}
                   type="checkbox"
                   className="signup-checkbox"
                 />
-                <FormLabel className="signup-checkbox-label">
-                  Author
-                </FormLabel>
+                <FormLabel className="signup-checkbox-label">Author</FormLabel>
               </FormGroup>
-              <FormGroup
-                controlId="isReviewer"
-                className="signup-checkbox-container">
+              <FormGroup controlId="isReviewer" className="signup-checkbox-container">
                 <FormControl
                   value={this.state.isReviewer}
                   onChange={this.handleChange}
                   type="checkbox"
                   className="signup-checkbox"
                 />
-                <FormLabel className="signup-checkbox-label">
-                  Reviewer
-                </FormLabel>
+                <FormLabel className="signup-checkbox-label">Reviewer</FormLabel>
               </FormGroup>
             </form>
           </div>
@@ -213,11 +197,7 @@ export default class SignUp extends React.Component {
                   placeholder="Optional"
                 />
               </FormGroup>
-              <Button
-                block
-                disabled={!this.validateForm()}
-                type="submit"
-              >
+              <Button block disabled={!this.validateForm()} type="submit">
                 Sign Up
               </Button>
             </form>

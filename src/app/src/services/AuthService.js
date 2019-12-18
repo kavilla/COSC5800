@@ -16,7 +16,7 @@ function authorizeUser(data) {
     data['phone'],
     data['affiliation'],
     data['isAuthor'],
-    data['isReviewer']
+    data['isReviewer'],
   );
   localStorage.setItem('email', currentParticipator.email);
   if (currentParticipator.password !== null) {
@@ -25,7 +25,7 @@ function authorizeUser(data) {
 }
 
 const AuthService = {
-  getToken: function () {
+  getToken: function() {
     const email = localStorage.getItem('email');
     const password = localStorage.getItem('password');
     if (email === null) {
@@ -34,11 +34,11 @@ const AuthService = {
 
     return Promise.resolve({
       email: email,
-      password: password
-    })
+      password: password,
+    });
   },
 
-  getCurrentParticipator: function () {
+  getCurrentParticipator: function() {
     if (currentParticipator === null) {
       const email = localStorage.getItem('email');
       const password = localStorage.getItem('password');
@@ -46,20 +46,18 @@ const AuthService = {
         return Promise.reject();
       }
 
-      return this.login(email, password)
-        .then(authorized => {
-          if (!authorized) {
-            return Promise.reject();
-          }
-          return Promise.resolve(currentParticipator);
+      return this.login(email, password).then(authorized => {
+        if (!authorized) {
+          return Promise.reject();
         }
-      );
+        return Promise.resolve(currentParticipator);
+      });
     }
 
-    return Promise.resolve(currentParticipator)
+    return Promise.resolve(currentParticipator);
   },
 
-  authorizedView: function () {
+  authorizedView: function() {
     document.getElementById('router-menu').style.display = 'flex';
     if (currentParticipator !== null) {
       if (!currentParticipator.isAuthor) {
@@ -77,16 +75,16 @@ const AuthService = {
     return Promise.resolve(true);
   },
 
-  unauthorizedView: function () {
-    document.getElementById('router-menu').style.display = 'none';;
+  unauthorizedView: function() {
+    document.getElementById('router-menu').style.display = 'none';
     return Promise.resolve(true);
   },
 
-  login: function (email, password) {
+  login: function(email, password) {
     return axios
       .post(authUrl + 'login', {
         email: email,
-        password: password
+        password: password,
       })
       .then(resp => {
         const data = resp['data'];
@@ -98,13 +96,13 @@ const AuthService = {
       });
   },
 
-  logout: function () {
+  logout: function() {
     localStorage.removeItem('email');
     localStorage.removeItem('password');
     return Promise.resolve(true);
   },
 
-  signup: function (participator) {
+  signup: function(participator) {
     return axios
       .post(authUrl + 'signup', {
         email: participator.email,
@@ -115,7 +113,7 @@ const AuthService = {
         phone: participator.phone,
         affiliation: participator.affiliation,
         isAuthor: participator.isAuthor,
-        isReviewer: participator.isReviewer
+        isReviewer: participator.isReviewer,
       })
       .then(resp => {
         const data = resp['data'];
@@ -129,7 +127,7 @@ const AuthService = {
 
         return Promise.reject(err.response.data.status);
       });
-  }
-}
+  },
+};
 
 export default AuthService;

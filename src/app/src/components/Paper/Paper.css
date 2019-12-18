@@ -29,12 +29,12 @@
   border: 0.05em solid;
   border-top: 0;
   padding: 0.25em 1.25em 0.05em 1.25em;
-  background: rgb(240,240,240);
+  background: rgb(240, 240, 240);
 }
 
 .review-card-container {
   flex: 2;
-  overflow-y:auto;
+  overflow-y: auto;
   background: lightgray;
 }
 

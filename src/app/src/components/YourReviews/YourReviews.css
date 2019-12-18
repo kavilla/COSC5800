@@ -7,7 +7,7 @@
 
 .your-reviews .card-container {
   flex: 1;
-  overflow-y:auto;
+  overflow-y: auto;
   margin: 0.25em 1.25em;
   background: lightgray;
 }

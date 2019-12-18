@@ -1,23 +1,23 @@
-import React from "react";
-import {Button, FormGroup, FormControl, FormLabel} from "react-bootstrap";
-import {Redirect, Link} from "react-router-dom";
-import "./Login.css";
-import AuthService from "./../../services/AuthService";
+import React from 'react';
+import { Button, FormGroup, FormControl, FormLabel } from 'react-bootstrap';
+import { Redirect, Link } from 'react-router-dom';
+import './Login.css';
+import AuthService from './../../services/AuthService';
 
 export default class Login extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      email: "",
+      email: '',
       password: null,
-      toHome: false
+      toHome: false,
     };
 
     AuthService.getToken().then(resp => {
       this.setState(() => ({
         email: resp['email'],
-        password: resp['password']
+        password: resp['password'],
       }));
 
       this.login();
@@ -37,21 +37,20 @@ export default class Login extends React.Component {
   }
 
   login() {
-    AuthService.login(this.state.email, this.state.password)
-      .then(resp => {
-        if (resp) {
-          this.setState(() => ({
-            toHome: true
-          }));
-        } else {
-          alert("Invalid email and/or password");
-        }
-      });
+    AuthService.login(this.state.email, this.state.password).then(resp => {
+      if (resp) {
+        this.setState(() => ({
+          toHome: true,
+        }));
+      } else {
+        alert('Invalid email and/or password');
+      }
+    });
   }
 
   handleChange = event => {
     this.setState({
-      [event.target.id]: event.target.value
+      [event.target.id]: event.target.value,
     });
   };
 
@@ -72,26 +71,13 @@ export default class Login extends React.Component {
           <h1>Conference App</h1>
           <FormGroup controlId="email">
             <FormLabel>Email</FormLabel>
-            <FormControl
-              autoFocus
-              type="email"
-              value={this.state.email}
-              onChange={this.handleChange}
-            />
+            <FormControl autoFocus type="email" value={this.state.email} onChange={this.handleChange} />
           </FormGroup>
           <FormGroup controlId="password">
             <FormLabel>Password</FormLabel>
-            <FormControl
-              value={this.state.password}
-              onChange={this.handleChange}
-              type="password"
-            />
+            <FormControl value={this.state.password} onChange={this.handleChange} type="password" />
           </FormGroup>
-          <Button
-            block
-            disabled={!this.validateForm()}
-            type="submit"
-          >
+          <Button block disabled={!this.validateForm()} type="submit">
             Login
           </Button>
         </form>
