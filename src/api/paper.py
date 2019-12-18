@@ -28,8 +28,8 @@ class Papers(Resource):
         paper_query = 'SELECT * FROM paper'
 
         result = db.session.execute(paper_query).fetchmany()
-        papers_schema = PaperSchema(many=True)
 
+        papers_schema = PaperSchema(many=True)
         return papers_schema.dump(result)
 
     @ns.expect(paper_model)
