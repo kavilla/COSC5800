@@ -47,9 +47,10 @@ code {
   background: rgb(240, 240, 240);
 }
 
-.router .router-link-settings {
-  /* border: none; */
-}
+/* .router .router-link-settings {
+  border: none;
+} 
+*/
 
 .router .router-link-settings:hover {
   background: none;
