@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_restplus import Api, Resource
 
-from config import db
+from app import db
 from models import ParticipatorSchema
 
 app = Flask(__name__)

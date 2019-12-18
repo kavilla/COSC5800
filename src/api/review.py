@@ -1,7 +1,7 @@
 from flask import Flask, request
 from flask_restplus import Api, Resource, fields
 
-from config import db
+from app import db
 from models import ReviewSchema, NotFoundException, NotAuthorizedException, CollisionException
 
 app = Flask(__name__)
