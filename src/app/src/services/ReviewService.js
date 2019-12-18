@@ -27,6 +27,31 @@ const ReviewService = {
     });
   },
 
+  getReviewsForPaper: function(paper) {
+    return axios
+      .get(reviewUrl + paper.paperid)
+      .then(resp => {
+        const paperReviews = resp.data.map(
+          x =>
+            new ReviewModel(
+              x['revemail'],
+              x['paperid'],
+              x['techmerit'],
+              x['readability'],
+              x['originality'],
+              x['relavance'],
+              x['overallrecomm'],
+              x['commentforcommittee'],
+              x['commentforauthor'],
+            ),
+        );
+        return Promise.resolve(paperReviews);
+      })
+      .catch(err => {
+        return Promise.resolve([]);
+      });
+  },
+
   getReviewsForParticipator: function(participator) {
     return axios
       .get(reviewUrl + participator.email)

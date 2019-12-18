@@ -45,7 +45,7 @@ export default class Paper extends React.Component {
           return;
         }
 
-        PaperService.getReviewsForPaper(paper).then(reviews => {
+        ReviewService.getReviewsForPaper(paper).then(reviews => {
           this.setState(() => ({
             isLoading: false,
             paper: paper,
