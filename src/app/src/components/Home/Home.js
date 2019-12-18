@@ -183,9 +183,8 @@ export default class Home extends React.Component {
           <textarea
             maxLength="120"
             placeholder="Abstract..."
-            className="app-modal-item"
+            className="app-modal-item form-control"
             name="abstract"
-            className="form-control"
             onChange={this.handleChange}
           ></textarea>
           <Button disabled={!this.validateForm()} onClick={() => this.handleSubmit()}>
