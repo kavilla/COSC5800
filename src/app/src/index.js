@@ -1,25 +1,23 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import "./index.css";
-import "bootstrap/dist/css/bootstrap.min.css";
-import {Route, Link, BrowserRouter as Router} from "react-router-dom";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './index.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { Route, Link, BrowserRouter as Router } from 'react-router-dom';
 
-import Home from "./components/Home/Home";
-import Login from "./components/Login/Login";
-import SignUp from "./components/SignUp/SignUp";
-import Paper from "./components/Paper/Paper";
-import Settings from "./components/Settings/Settings";
-import YourPapers from "./components/YourPapers/YourPapers";
-import YourReviews from "./components/YourReviews/YourReviews";
-import * as serviceWorker from "./serviceWorker";
+import Home from './components/Home/Home';
+import Login from './components/Login/Login';
+import SignUp from './components/SignUp/SignUp';
+import Paper from './components/Paper/Paper';
+import Settings from './components/Settings/Settings';
+import YourPapers from './components/YourPapers/YourPapers';
+import YourReviews from './components/YourReviews/YourReviews';
+import * as serviceWorker from './serviceWorker';
 
 const routing = (
   <Router>
     <div className="router">
       <div className="router-menu" id="router-menu">
-        <h5 className="router-menu-header">
-          Conference App
-        </h5>
+        <h5 className="router-menu-header">Conference App</h5>
         <Link to="/home" className="router-link">
           Papers
         </Link>
@@ -46,7 +44,7 @@ const routing = (
   </Router>
 );
 
-ReactDOM.render(routing, document.getElementById("root"));
+ReactDOM.render(routing, document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

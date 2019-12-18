@@ -9,35 +9,21 @@ let papers = [];
 let selectedPaper = null;
 
 const PaperService = {
-  getPapers: function () {
-    return axios
-      .get(paperUrl)
-      .then(resp => {
-        papers = resp.data.map(x =>
-          new PaperModel(
-            x['paperid'],
-            x['title'],
-            x['filename'],
-            x['contactauthoremail'],
-            x['abstract']
-          )
-        );
-        return Promise.resolve(papers);
-      });
+  getPapers: function() {
+    return axios.get(paperUrl).then(resp => {
+      papers = resp.data.map(
+        x => new PaperModel(x['paperid'], x['title'], x['filename'], x['contactauthoremail'], x['abstract']),
+      );
+      return Promise.resolve(papers);
+    });
   },
 
-  getPapersForParticipator: function (participator) {
+  getPapersForParticipator: function(participator) {
     return axios
       .get(paperUrl + participator.email)
       .then(resp => {
-        const participatorPapers = resp.data.map(x =>
-          new PaperModel(
-            x['paperid'],
-            x['title'],
-            x['filename'],
-            x['contactauthoremail'],
-            x['abstract']
-          )
+        const participatorPapers = resp.data.map(
+          x => new PaperModel(x['paperid'], x['title'], x['filename'], x['contactauthoremail'], x['abstract']),
         );
         return Promise.resolve(participatorPapers);
       })
@@ -46,40 +32,37 @@ const PaperService = {
       });
   },
 
-  getSelectedPaper: function () {
+  getSelectedPaper: function() {
     return Promise.resolve(selectedPaper);
   },
 
-  setSelectedPaper: function (paper) {
+  setSelectedPaper: function(paper) {
     selectedPaper = paper;
     return Promise.resolve(selectedPaper);
   },
 
-  setSelectedPaperByPaperId: function (paperId) {
-    return axios
-      .get(paperUrl + paperId)
-      .then(resp => {
-        const data = resp['data'];
-        selectedPaper = new PaperModel(
-          data['paperid'],
-          data['title'],
-          data['filename'],
-          data['contactauthoremail'],
-          data['abstract']
-        );
-        return Promise.resolve(selectedPaper);
-      });
+  setSelectedPaperByPaperId: function(paperId) {
+    return axios.get(paperUrl + paperId).then(resp => {
+      const data = resp['data'];
+      selectedPaper = new PaperModel(
+        data['paperid'],
+        data['title'],
+        data['filename'],
+        data['contactauthoremail'],
+        data['abstract'],
+      );
+      return Promise.resolve(selectedPaper);
+    });
   },
 
-  getReviewsForPaper: function (paper) {
+  getReviewsForPaper: function(paper) {
     if (paper === null) {
       return Promise.reject();
     }
 
-    return axios
-      .get(paperUrl + paper.paperid + '/reviews')
-      .then(resp => {
-        const reviews = resp.data.map(x =>
+    return axios.get(paperUrl + paper.paperid + '/reviews').then(resp => {
+      const reviews = resp.data.map(
+        x =>
           new ReviewModel(
             x['revemail'],
             x['paperid'],
@@ -89,25 +72,19 @@ const PaperService = {
             x['relavance'],
             x['overallrecomm'],
             x['commentforcommittee'],
-            x['commentforauthor']
-          )
-        );
-        return Promise.resolve(reviews);
-      });
+            x['commentforauthor'],
+          ),
+      );
+      return Promise.resolve(reviews);
+    });
   },
 
-  createPaper: function (paper) {
+  createPaper: function(paper) {
     return axios
       .post(paperUrl, paper)
       .then(resp => {
-        papers = resp.data.map(x =>
-          new PaperModel(
-            x['paperid'],
-            x['title'],
-            x['filename'],
-            x['contactauthoremail'],
-            x['abstract']
-          )
+        papers = resp.data.map(
+          x => new PaperModel(x['paperid'], x['title'], x['filename'], x['contactauthoremail'], x['abstract']),
         );
         return Promise.resolve(papers);
       })
@@ -117,8 +94,8 @@ const PaperService = {
         }
 
         return Promise.reject(err.response.data.status);
-      });;
+      });
   },
-}
+};
 
 export default PaperService;
