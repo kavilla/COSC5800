@@ -41,7 +41,7 @@ Setup video:
   * If you run into an error saying cx-Oracle could not be installed you need to install from [here](https://visualstudio.microsoft.com/thank-you-for-downloading-visual-studio-for-cplusplus/?sku=Community&rel=16&rid=30005)
 * Run the API by running:
   ```
-  python app.py
+  python run.py
   ```
 * Open to [http://localhost:5000](http://localhost:5000) to get the swagger page.
 
