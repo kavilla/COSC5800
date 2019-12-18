@@ -1,7 +1,8 @@
 from flask import Flask, request
 from flask_restplus import Api, Resource, fields
-from config import db
-from models import Paper as P, PaperSchema, ReviewSchema, NotFoundException, NotAuthorizedException
+
+from app import db
+from models import PaperSchema, ReviewSchema, NotFoundException, NotAuthorizedException
 
 app = Flask(__name__)
 api = Api(app=app)
@@ -14,17 +15,22 @@ paper_model = ns.model('Paper', {
     'abstract': fields.String(description='abstract')
 })
 
+
 @ns.route("/")
 class Papers(Resource):
+    @ns.doc(responses={
+        200: 'Success'
+    })
     def get(self):
         """
-        Returns a list of paper
+        Returns a list of papers
         """
-        papers = P.query.all()
+        paper_query = 'SELECT * FROM paper'
 
-        # Serialize the data for the response
+        result = db.session.execute(paper_query).fetchmany()
+
         papers_schema = PaperSchema(many=True)
-        return papers_schema.dump(papers)
+        return papers_schema.dump(result)
 
     @ns.expect(paper_model)
     @ns.doc(responses={
@@ -34,97 +40,112 @@ class Papers(Resource):
     })
     def post(self):
         """
-        Adds a new paper to the list
+        Creates a new paper and returns updated list of papers
         """
         try:
+            author_query = 'SELECT * FROM author WHERE email = :email'
+            insert_paper_query = 'INSERT INTO paper VALUES (Paper_paperid_Seq.nextval, :title, :filename, :contactauthoremail, :abstract)'
+            commit_query = 'COMMIT'
+
             data = request.get_json(force=True)
 
-            authorResult = db.session.execute('SELECT * FROM author WHERE email = :email', {
+            author_result = db.session.execute(author_query, {
                 'email': data['contactauthoremail']
             }).fetchone()
 
-            if authorResult == None:
-                raise UnauthorizedException
+            if author_result == None:
+                raise NotAuthorizedException
 
-            # Serialize the data for the response
-            db.session.execute('INSERT INTO paper VALUES (Paper_paperid_Seq.nextval, :title, :filename, :contactauthoremail, :abstract)', {
+            db.session.execute(insert_paper_query, {
                 'title': data['title'],
                 'filename': data['filename'],
                 'contactauthoremail': data['contactauthoremail'],
                 'abstract': data['abstract']
             })
 
-            db.session.execute('COMMIT')
+            db.session.execute(commit_query)
 
-            result = db.session.execute('SELECT * FROM paper').fetchmany()
-            papers_schema = PaperSchema(many=True)
-            return papers_schema.dump(result)
+            return self.get()
         except NotAuthorizedException as e:
-            ns.abort(401, e.__doc__, status = 'Not allowed to POST review', statusCode = '401')
+            ns.abort(401, e.__doc__, status='Not allowed to create paper', statusCode='401')
+        except Exception as e:
+            app.logger.error(e)
+            ns.abort(400, e.__doc__, status='Could not retrieve information', statusCode='400')
+
 
 @ns.route('/<int:paperid>')
 class Paper(Resource):
+    @ns.doc(responses={
+        200: 'Success',
+        404: 'Not Found'
+    })
     def get(self, paperid):
         """
-        Displays a paper's details
+        Returns a paper if it exists
         """
         try:
-            # Serialize the data for the response
-            result = db.session.execute('SELECT * FROM paper WHERE paperid = :paperid', {
+            paper_query = 'SELECT * FROM paper WHERE paperid = :paperid'
+
+            result = db.session.execute(paper_query, {
                 'paperid': paperid
             }).fetchone()
+
             if result == None:
                 raise NotFoundException
+
             paper_schema = PaperSchema()
             return paper_schema.dump(result)
         except NotFoundException as e:
-            ns.abort(404, e.__doc__, status = 'Could not find paper with paperid', statusCode = '404')
-    def put(self, paperid):
-        """
-        Edits a selected paper
-        """
+            ns.abort(404, e.__doc__, status='Could not find paper with paperid', statusCode='404')
+
 
 @ns.route("/<string:email>")
-@ns.doc(responses={
-    200: 'Success',
-    404: 'Could not find papers for email'
-})
 class ParticipatorPapers(Resource):
+    @ns.doc(responses={
+        200: 'Success',
+        404: 'Not Found'
+    })
     def get(self, email):
         """
-        Displays a papers authored/coauthored by participator
+        Returns a list of papers authored/coauthored by participator
         """
-        # paperid = db.Column(db.Integer(), primary_key=True)
-        # title = db.Column(db.String(50), nullable=False)
-        # filename = db.Column(db.String(30), nullable=False)
-        # contactauthoremail = db.Column(db.String(30))
-        # abstract = db.Column(db.String(120))
         try:
-            # Serialize the data for the response
-            papers = db.session.execute('SELECT * FROM paper writes WHERE paperid IN (SELECT paperid FROM writes WHERE email = :email)', {
+            paper_query = 'SELECT * FROM paper writes WHERE paperid IN (SELECT paperid FROM writes WHERE email = :email)'
+
+            result = db.session.execute(paper_query, {
                 'email': email
             }).fetchmany()
-            if papers == None:
+
+            if result == None:
                 raise NotFoundException
+
             papers_schema = PaperSchema(many=True)
-            return papers_schema.dump(papers)
+            return papers_schema.dump(result)
         except NotFoundException as e:
-            ns.abort(404, e.__doc__, status = 'Could not find papers for email', statusCode = '404')
+            ns.abort(404, e.__doc__, status='Could not find papers for email', statusCode='404')
+
 
 @ns.route('/<int:paperid>/reviews')
 class PaperReviews(Resource):
+    @ns.doc(responses={
+        200: 'Success',
+        404: 'Not Found'
+    })
     def get(self, paperid):
         """
-        Displays a paper's reviews
+        Returns a list of reviews for paper
         """
         try:
-            # Serialize the data for the response
-            reviews = db.session.execute('SELECT * FROM reviews WHERE paperid = :paperid', {
+            review_query = 'SELECT * FROM reviews WHERE paperid = :paperid'
+
+            result = db.session.execute(review_query, {
                 'paperid': paperid
             }).fetchmany()
-            if reviews == None:
+
+            if result == None:
                 raise NotFoundException
+
             reviews_schema = ReviewSchema(many=True)
-            return reviews_schema.dump(reviews)
+            return reviews_schema.dump(result)
         except NotFoundException as e:
-            ns.abort(404, e.__doc__, status = 'Could not find paper with paperid', statusCode = '404')
+            ns.abort(404, e.__doc__, status='Could not find reviews with paper', statusCode='404')

@@ -1,14 +1,18 @@
-from config import db, ma
+from app import db, ma
+
 
 # Custom Exception
 class NotFoundException(Exception):
     pass
 
+
 class NotAuthorizedException(Exception):
     pass
 
+
 class CollisionException(Exception):
     pass
+
 
 # Participator
 class Participator(db.Model):
@@ -30,10 +34,12 @@ class Participator(db.Model):
         self.affiliation = affiliation
         self.password = password
 
+
 class ParticipatorSchema(ma.ModelSchema):
     class Meta:
         model = Participator
         sqla_session = db.session
+
 
 # Paper
 class Paper(db.Model):
@@ -51,10 +57,12 @@ class Paper(db.Model):
         self.contactauthoremail = contactauthoremail
         self.abstract = abstract
 
+
 class PaperSchema(ma.ModelSchema):
     class Meta:
         model = Paper
         sqla_session = db.session
+
 
 # Review
 class Review(db.Model):
@@ -70,16 +78,16 @@ class Review(db.Model):
     commentforauthor = db.Column(db.String(120))
 
     def __init__(
-        self,
-        revemail,
-        paperid,
-        techmerit,
-        readability,
-        originality,
-        relavance,
-        overallrecomm,
-        commentforcommittee,
-        commentforauthor):
+            self,
+            revemail,
+            paperid,
+            techmerit,
+            readability,
+            originality,
+            relavance,
+            overallrecomm,
+            commentforcommittee,
+            commentforauthor):
         self.revemail = revemail
         self.paperid = paperid
         self.techmerit = techmerit
@@ -89,6 +97,7 @@ class Review(db.Model):
         self.overallrecomm = overallrecomm
         self.commentforcommittee = commentforcommittee
         self.commentforauthor = commentforauthor
+
 
 class ReviewSchema(ma.ModelSchema):
     class Meta:
