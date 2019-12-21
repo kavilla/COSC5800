@@ -48,13 +48,20 @@ code {
   background: rgb(71, 71, 82);
 }
 
-/* .router .router-link-settings {
+.router .router-link-settings {
   border: none;
-} 
-*/
+  position: absolute;
+  bottom: 1em;
+  left: 0.25em;
+  color: white;
+}
 
 .router .router-link-settings:hover {
   background: none;
+}
+
+#router-link-settings-icon:hover {
+  opacity: 0.5;
 }
 
 .router .router-view {

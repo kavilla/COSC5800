@@ -28,7 +28,7 @@ const routing = (
           Your Reviews
         </Link>
         <Link to="/settings" className="router-link router-link-settings">
-          Settings
+          <img id="router-link-settings-icon" src="../../settings24.png" alt="Settings" />
         </Link>
       </div>
       <div className="router-view">
