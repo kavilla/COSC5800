@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Route, Link, BrowserRouter as Router } from 'react-router-dom';
+import { Route, NavLink, BrowserRouter as Router } from 'react-router-dom';
 
 import Home from './components/Home/Home';
 import Login from './components/Login/Login';
@@ -18,18 +18,28 @@ const routing = (
     <div className="router">
       <div className="router-menu" id="router-menu">
         <h5 className="router-menu-header">Conference App</h5>
-        <Link to="/home" className="router-link">
+        <NavLink to="/home" className="router-link" activeClassName="router-link-active">
           Papers
-        </Link>
-        <Link to="/yourpapers" className="router-link" id="router-menu-yourpapers">
+        </NavLink>
+        <NavLink
+          to="/yourpapers"
+          className="router-link"
+          activeClassName="router-link-active"
+          id="router-menu-yourpapers"
+        >
           Your Papers
-        </Link>
-        <Link to="/yourreviews" className="router-link router-link-last" id="router-menu-yourreviews">
+        </NavLink>
+        <NavLink
+          to="/yourreviews"
+          className="router-link router-link-last"
+          activeClassName="router-link-active"
+          id="router-menu-yourreviews"
+        >
           Your Reviews
-        </Link>
-        <Link to="/settings" className="router-link router-link-settings">
-          Settings
-        </Link>
+        </NavLink>
+        <NavLink to="/settings" className="router-link router-link-settings">
+          <img id="router-link-settings-icon" src="../../settings24.png" alt="Settings" />
+        </NavLink>
       </div>
       <div className="router-view">
         <Route exact path="/" component={Login} />
