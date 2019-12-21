@@ -39,9 +39,9 @@ code {
   background-color: rgb(41, 41, 52);
 }
 
-/* .router .router-link-last {
+.router .router-link-last {
   border-bottom: 0.05em solid;
-} */
+}
 
 .router .router-link:hover {
   text-decoration: none;
