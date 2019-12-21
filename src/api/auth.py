@@ -95,7 +95,9 @@ class AuthSignUp(Resource):
         """
         try:
             participator_query = 'SELECT * FROM participator WHERE email = :email'
-            insert_participator_query = 'INSERT INTO participator VALUES ( :email, :firstname, :minit, :lastname, :phone, :affiliation, :password )'
+            insert_participator_query = '''
+                INSERT INTO participator VALUES (:email, :firstname, :minit, :lastname, :phone, :affiliation, :password)
+            '''
             insert_author_query = 'INSERT INTO author VALUES ( :email )'
             insert_reviewer_query = 'INSERT INTO reviewer VALUES ( :email )'
             commit_query = 'COMMIT'

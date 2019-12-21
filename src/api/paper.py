@@ -44,7 +44,11 @@ class Papers(Resource):
         """
         try:
             author_query = 'SELECT * FROM author WHERE email = :email'
-            insert_paper_query = 'INSERT INTO paper VALUES (Paper_paperid_Seq.nextval, :title, :filename, :contactauthoremail, :abstract)'
+            insert_paper_query = '''
+                INSERT INTO paper VALUES (Paper_paperid_Seq.nextval, :title, :filename, :contactauthoremail, :abstract)
+            '''
+            paper_query = 'SELECT * FROM paper ORDER BY paperid DESC FETCH FIRST 1 ROWS ONLY'
+            insert_writes_query = 'INSERT INTO writes VALUES (:paperid, :email)'
             commit_query = 'COMMIT'
 
             data = request.get_json(force=True)
@@ -61,6 +65,13 @@ class Papers(Resource):
                 'filename': data['filename'],
                 'contactauthoremail': data['contactauthoremail'],
                 'abstract': data['abstract']
+            })
+
+            result = db.session.execute(paper_query).fetchone()
+
+            db.session.execute(insert_writes_query, {
+                'paperid': result['paperid'],
+                'email': data['contactauthoremail']
             })
 
             db.session.execute(commit_query)
@@ -110,7 +121,7 @@ class ParticipatorPapers(Resource):
         Returns a list of papers authored/coauthored by participator
         """
         try:
-            paper_query = 'SELECT * FROM paper writes WHERE paperid IN (SELECT paperid FROM writes WHERE email = :email)'
+            paper_query = 'SELECT * FROM paper WHERE paperid IN (SELECT paperid FROM writes WHERE email = :email)'
 
             result = db.session.execute(paper_query, {
                 'email': email

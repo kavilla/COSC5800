@@ -50,7 +50,10 @@ class Reviews(Resource):
         try:
             reviewer_query = 'SELECT * FROM reviewer WHERE email = :email'
             review_query = 'SELECT * FROM reviews WHERE revemail = :revemail AND paperid = :paperid'
-            insert_review_query = 'INSERT INTO reviews VALUES (:revemail, :paperid, :techmerit, :readability, :originality, :relavance, :overallrecomm, :commentforcommittee, :commentforauthor)'
+            insert_review_query = '''
+                INSERT INTO reviews 
+                VALUES (:revemail, :paperid, :techmerit, :readability, :originality, :relavance, :overallrecomm, :commentforcommittee, :commentforauthor)
+            '''
             commit_query = 'COMMIT'
 
             data = request.get_json(force=True)
@@ -84,7 +87,7 @@ class Reviews(Resource):
 
             db.session.execute(commit_query)
 
-            return PaperReviews.get()
+            return PaperReviews.get(self, data['paperid'])
         except CollisionException as e:
             ns.abort(400, e.__doc__, status='Review for paper already exists for email', statusCode='400')
         except NotAuthorizedException as e:
