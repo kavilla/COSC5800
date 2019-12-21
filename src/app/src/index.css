@@ -48,6 +48,18 @@ code {
   background: rgb(71, 71, 82);
 }
 
+.router .router-link-active {
+  background: white;
+  color: black;
+  margin-right: -0.75em;
+  border: none;
+}
+
+.router .router-link-active:hover {
+  background: white;
+  text-decoration: underline;
+}
+
 .router .router-link-settings {
   border: none;
   position: absolute;
